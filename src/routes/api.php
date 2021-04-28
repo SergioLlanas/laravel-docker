@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\GetUserController;
+use App\Http\Controllers\GetWalletController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +24,14 @@ use Illuminate\Support\Facades\Route;
 Route::get(
     '/status',
     StatusController::class
+);
+
+Route::get(
+    '/user/{id}',
+    GetUserController::class
+);
+
+Route::get(
+    '/wallet/{idWallet}',
+    GetWalletController::class
 );
