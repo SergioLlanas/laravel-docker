@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GetBalanceController;
 use App\Http\Controllers\GetUserController;
 use App\Http\Controllers\GetWalletController;
 use App\Http\Controllers\StatusController;
@@ -34,4 +35,9 @@ Route::get(
 Route::get(
     '/wallet/{idWallet}',
     GetWalletController::class
+);
+
+Route::get(
+    '/wallet/{idWallet}/balance',
+    GetBalanceController::class
 );
