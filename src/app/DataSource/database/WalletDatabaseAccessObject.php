@@ -14,4 +14,7 @@ class WalletDatabaseAccessObject
         return DB::table('wallets')->where('wallet_id',$id)->first();
     }
 
+    public function createNewWalletWithUserId(String $userId){
+        DB::insert('insert into wallets (user_id) values (?)', $userId);
+    }
 }

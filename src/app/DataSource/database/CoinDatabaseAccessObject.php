@@ -22,4 +22,8 @@ class CoinDatabaseAccessObject{
         return $coin->symbol;
     }
 
+    public function getWalletWithMaxId(){
+        return DB::select("select * from wallets where wallet_id = max(wallet_id)");
+    }
+
 }

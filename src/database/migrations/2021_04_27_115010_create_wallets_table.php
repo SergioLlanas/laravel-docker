@@ -14,13 +14,8 @@ class CreateWalletsTable extends Migration
     public function up()
     {
         Schema::create('wallets', function (Blueprint $table) {
-            $table->string('wallet_id')->primary();
-            //$table->string('');
-            //$table->float('amount_usd');
-            $table->string('coin_id');
-            $table->foreign('coin_id')->references('coin_id')->on('coins');
-            $table->float('buy_price');
-            $table->float('amount_coins');
+            $table->increments('wallet_id');
+            $table->string('user_id');
         });
     }
 

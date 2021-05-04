@@ -17,6 +17,10 @@ class CreateCoinsTable extends Migration
             $table->string('coin_id')->primary();
             $table->string('name')->unique();
             $table->string('symbol');
+            $table->string('wallet_id');
+            //$table->foreign('wallet_id')->references('wallet_id')->on('wallets');
+            $table->float('buy_price');
+            $table->float('amount_coins');
         });
     }
 
