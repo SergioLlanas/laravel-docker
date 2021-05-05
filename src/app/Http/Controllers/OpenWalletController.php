@@ -27,11 +27,14 @@ class OpenWalletController extends BaseController {
     }
 
     public function __invoke(Request $request): JsonResponse{
-        $userId = $request->get('user_id');
-        $this->walletDAO->createNewWalletWithUserId($userId);
-        $walletId = $this->walletDAO->getWalletWithMaxId();
+
+       $userId = $request->input("user_id");
+       $this->walletDAO->createNewWalletWithUserId($userId);
+       $walletWithMaxId = $this->walletDAO->getWalletWithMaxId();
+
+
         return response()->json([
-            'wallet_id' => $walletId
+            'wallet_id' => $walletWithMaxId
         ], Response::HTTP_OK);
         // TODO: Implement __invoke() method.
     }

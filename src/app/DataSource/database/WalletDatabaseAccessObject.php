@@ -15,6 +15,10 @@ class WalletDatabaseAccessObject
     }
 
     public function createNewWalletWithUserId(String $userId){
-        DB::insert('insert into wallets (user_id) values (?)', $userId);
+        DB::insert('insert into wallets (user_id) values ('. $userId. ')');
+    }
+
+    public function getWalletWithMaxId(){
+        return DB::table('wallets')->max('wallet_id');
     }
 }
