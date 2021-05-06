@@ -21,6 +21,7 @@ class CreateCoinsTable extends Migration
             //$table->foreign('wallet_id')->references('wallet_id')->on('wallets');
             $table->float('buy_price');
             $table->float('amount_coins');
+            $table->timestamps();
         });
     }
 

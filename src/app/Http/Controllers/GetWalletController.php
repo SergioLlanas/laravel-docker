@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Exception;
 use App\Services\GetCoinService;
 use App\Services\GetWalletService;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +28,17 @@ class GetWalletController extends BaseController
 
     public function __invoke(String $idWallet): JsonResponse{
 
-       $wallet = $this->walletService->execute($idWallet);
-       $coinName = $this->coinService->getCoinName($wallet->coin_id);
-       $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);
+        try {
+            //$isEarlyAdopter = $this->isEarlyAdopterService->execute($email);
+            $wallet = $this->walletService->execute($idWallet);
+            $coinName = $this->coinService->getCoinName($wallet->coin_id);
+            $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
         return response()->json([
             'coin_id' => $wallet->coin_id,
             'name' => $coinName,
@@ -38,5 +46,17 @@ class GetWalletController extends BaseController
             'amount' => $wallet->amount_coins,
             'value_usd' => $wallet->buy_price
         ], Response::HTTP_OK);
+
+
+       /*$wallet = $this->walletService->execute($idWallet);
+       $coinName = $this->coinService->getCoinName($wallet->coin_id);
+       $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);*/
+        /*return response()->json([
+            'coin_id' => $wallet->coin_id,
+            'name' => $coinName,
+            'symbol' => $coinSymbol,
+            'amount' => $wallet->amount_coins,
+            'value_usd' => $wallet->buy_price
+        ], Response::HTTP_OK);*/
     }
 }

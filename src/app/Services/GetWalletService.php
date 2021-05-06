@@ -11,19 +11,17 @@ class GetWalletService{
     /**
      * @var WalletDataSource
      */
-    private $walletDAO;
-
-
+    private $walletDataSource;
 
     /**
      * GetWalletService constructor.
      */
-    public function __construct(WalletDataSource $walletDAO){
-        $this->walletDAO = $walletDAO;
+    public function __construct(WalletDataSource $walletDataSource){
+        $this->walletDataSource = $walletDataSource;
     }
 
     public function execute(String $id){
-        $wallet = $this->walletDAO->getWalletById($id);
+        $wallet = $this->walletDataSource->getWalletById($id);
         if($wallet == null){
             throw new \Exception('Wallet not found');
         }

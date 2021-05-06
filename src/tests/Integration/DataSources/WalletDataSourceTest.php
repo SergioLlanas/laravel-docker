@@ -2,10 +2,11 @@
 
 namespace Tests\Integration\DataSources;
 
-use App\DataSource\database\WalletDataSource;
-use App\Http\Controllers\GetUserController;
+
+use App\DataSource\Database\WalletDataSource;
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class WalletDataSourceTest extends TestCase
@@ -13,11 +14,12 @@ class WalletDataSourceTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function testExample(){
-        $response = $this->get('/');
-        $response->assertStatus(200);
-        /*$walletDAO = new WalletDataSource();
-        $output = $walletDAO->getWalletById('1');
-        $this->assertNotEmpty($output);*/
+    public function getWalletById(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        $wallet = $walletDataSource->getWalletById('1');
+
+        $this->assertInstanceOf(Wallet::class, $wallet);
     }
 }

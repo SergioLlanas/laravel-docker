@@ -1,20 +1,24 @@
 <?php
 
 
-namespace App\DataSource\database;
+namespace App\DataSource\Database;
 
-
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Scalar\String_;
+use App\Models\Wallet;
+use Exception;
 
 class WalletDataSource
 {
 
-    public function getWalletById(String $id){
-        $wallet = DB::table('wallets')->where('wallet_id',$id)->first();
+    public function getWalletById(String $wallet_id): Wallet{
+        $wallet = Wallet::query()->where('wallet_id', $wallet_id)->first();
+        if (is_null($wallet)) {
+            throw new Exception('Wallet not found');
+        }
+        return $wallet;
+        /*$wallet = DB::table('wallets')->where('wallet_id',$id)->first();
         echo $wallet;
         var_dump($wallet);
-        return $wallet;
+        return $wallet;*/
     }
 
     public function createNewWalletWithUserId(String $userId){
