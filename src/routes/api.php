@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyCoinController;
 use App\Http\Controllers\GetBalanceController;
 use App\Http\Controllers\GetUserController;
 use App\Http\Controllers\GetWalletController;
@@ -47,3 +48,9 @@ Route::post(
     '/wallet/open',
     OpenWalletController::class
 );
+
+Route::post(
+    '/coin/buy',
+    BuyCoinController::class
+);
+

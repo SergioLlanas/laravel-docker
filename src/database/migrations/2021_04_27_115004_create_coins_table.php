@@ -15,7 +15,7 @@ class CreateCoinsTable extends Migration
     {
         Schema::create('coins', function (Blueprint $table) {
             $table->string('coin_id')->primary();
-            $table->string('name')->unique();
+            $table->string('nameCoin')->unique();
             $table->string('symbol');
             $table->string('wallet_id');
             //$table->foreign('wallet_id')->references('wallet_id')->on('wallets');

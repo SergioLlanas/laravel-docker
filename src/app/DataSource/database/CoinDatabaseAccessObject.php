@@ -5,6 +5,7 @@ namespace App\DataSource\database;
 
 
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 
 class CoinDatabaseAccessObject{
 
@@ -22,8 +23,15 @@ class CoinDatabaseAccessObject{
         return $coin->symbol;
     }
 
-    public function getWalletWithMaxId(){
-        return DB::select("select * from wallets where wallet_id = max(wallet_id)");
-    }
+   public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price){
+       DB::table('coins')->insert([
+           'coin_id' => $coin_id,
+           'nameCoin' => $name,
+           'symbol' => $symbol,
+           'wallet_id' => $wallet_id,
+           'buy_price' => $buy_price,
+           'amount_coins' => $amount_usd/$buy_price
+       ]);
+   }
 
 }
