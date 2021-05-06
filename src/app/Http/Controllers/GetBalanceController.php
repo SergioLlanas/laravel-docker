@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Service\GetWalletService;
+use App\Services\GetWalletService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;

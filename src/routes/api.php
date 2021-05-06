@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IsEarlyAdopterUserController;
 use App\Http\Controllers\BuyCoinController;
 use App\Http\Controllers\GetBalanceController;
 use App\Http\Controllers\GetUserController;
@@ -28,6 +29,8 @@ Route::get(
     '/status',
     StatusController::class
 );
+
+Route::get('user/{email}', IsEarlyAdopterUserController::class);
 
 Route::get(
     '/user/{id}',

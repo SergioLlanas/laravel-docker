@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\DataSource\database\WalletDatabaseAccessObject;
+use App\DataSource\database\WalletDataSource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 class OpenWalletController extends BaseController {
     /**
-     * @var WalletDatabaseAccessObject
+     * @var WalletDataSource
      */
     private $walletDAO;
 
@@ -20,7 +20,7 @@ class OpenWalletController extends BaseController {
     /**
      * OpenWalletController constructor.
      */
-    public function __construct(WalletDatabaseAccessObject $walletDAO){
+    public function __construct(WalletDataSource $walletDAO){
 
         $this->walletDAO = $walletDAO;
 

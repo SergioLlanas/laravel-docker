@@ -4,14 +4,14 @@
 namespace App\Http\Controllers;
 
 
-use App\DataSource\database\CoinDatabaseAccessObject;
+use App\DataSource\database\CoinDataSource;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class BuyCoinController extends BaseController{
 
     /**
-     * @var CoinDatabaseAccessObject
+     * @var CoinDataSource
      */
     private $coinDAO;
 
@@ -19,7 +19,7 @@ class BuyCoinController extends BaseController{
     /**
      * BuyCoinController constructor.
      */
-    public function __construct(CoinDatabaseAccessObject $coinDAO){
+    public function __construct(CoinDataSource $coinDAO){
         $this->coinDAO = $coinDAO;
     }
 

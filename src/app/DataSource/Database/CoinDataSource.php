@@ -7,7 +7,7 @@ namespace App\DataSource\database;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 
-class CoinDatabaseAccessObject{
+class CoinDataSource{
 
     public function getCoinById(String $id){
         return DB::table('coins')->where('coin_id',$id)->first();

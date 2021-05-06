@@ -1,15 +1,15 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Services;
 
 
-use App\DataSource\database\CoinDatabaseAccessObject;
-use App\DataSource\database\WalletDatabaseAccessObject;
+use App\DataSource\database\CoinDataSource;
+use App\DataSource\database\WalletDataSource;
 
 class GetWalletService{
     /**
-     * @var WalletDatabaseAccessObject
+     * @var WalletDataSource
      */
     private $walletDAO;
 
@@ -18,7 +18,7 @@ class GetWalletService{
     /**
      * GetWalletService constructor.
      */
-    public function __construct(WalletDatabaseAccessObject $walletDAO){
+    public function __construct(WalletDataSource $walletDAO){
         $this->walletDAO = $walletDAO;
     }
 

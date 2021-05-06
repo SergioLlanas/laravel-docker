@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Services;
 
 
-use App\DataSource\database\CoinDatabaseAccessObject;
+use App\DataSource\database\CoinDataSource;
 
 class GetCoinService{
 
@@ -13,7 +13,7 @@ class GetCoinService{
     /**
      * GetCoinService constructor.
      */
-    public function __construct(CoinDatabaseAccessObject $coinDAO){
+    public function __construct(CoinDataSource $coinDAO){
         $this->coinDAO = $coinDAO;
 
     }

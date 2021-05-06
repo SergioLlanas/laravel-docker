@@ -7,11 +7,14 @@ namespace App\DataSource\database;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Scalar\String_;
 
-class WalletDatabaseAccessObject
+class WalletDataSource
 {
 
     public function getWalletById(String $id){
-        return DB::table('wallets')->where('wallet_id',$id)->first();
+        $wallet = DB::table('wallets')->where('wallet_id',$id)->first();
+        echo $wallet;
+        var_dump($wallet);
+        return $wallet;
     }
 
     public function createNewWalletWithUserId(String $userId){
