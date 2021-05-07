@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DataSource\database\WalletDataSource;
+use App\Models\Wallet;
 
 class GetWalletService{
     /**
@@ -17,11 +18,28 @@ class GetWalletService{
         $this->walletDataSource = $walletDataSource;
     }
 
-    public function execute(String $id){
-        $wallet = $this->walletDataSource->getWalletById($id);
+    public function open(String $user_id):Wallet{
+        $this->walletDataSource->createNewWalletWithUserId($user_id);
+        $wallet = $this->walletDataSource->getWalletWithMaxId();
+        if($wallet == null){
+            throw new \Exception('Wallet not created');
+        }
+        return $wallet;
+    }
+
+    public function find(String $wallet_id):Wallet{
+        $wallet = $this->walletDataSource->getWalletById($wallet_id);
         if($wallet == null){
             throw new \Exception('Wallet not found');
         }
         return $wallet;
     }
+
+    /*public function execute(String $id):Wallet{
+        $wallet = $this->walletDataSource->getWalletById($id);
+        if($wallet == null){
+            throw new \Exception('Wallet not found');
+        }
+        return $wallet;
+    }*/
 }
