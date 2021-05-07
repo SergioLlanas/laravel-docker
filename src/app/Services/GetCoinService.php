@@ -15,8 +15,8 @@ class GetCoinService{
      */
     public function __construct(CoinDataSource $coinDAO){
         $this->coinDAO = $coinDAO;
-
     }
+
     public function getCoinName(String $coinId):String{
         $coinName = $this->coinDAO->getCoinNameById($coinId);
         if($coinName == null){

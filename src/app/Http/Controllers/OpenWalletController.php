@@ -37,5 +37,7 @@ class OpenWalletController extends BaseController {
             'wallet_id' => $walletWithMaxId
         ], Response::HTTP_OK);
 
+
+
     }
 }

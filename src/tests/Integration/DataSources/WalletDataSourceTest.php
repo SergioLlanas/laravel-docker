@@ -31,4 +31,16 @@ class WalletDataSourceTest extends TestCase{
         $this->assertInstanceOf(Wallet::class, $wallet);
     }
 
+    /** @test */
+    /*public function createNewWalletWithUserId(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        $wallet = $walletDataSource->createNewWalletWithUserId('25');
+
+        $this->assertTrue($wallet);
+        //$this->assertInstanceOf(Wallet::class, $wallet);
+    }*/
+
+
 }

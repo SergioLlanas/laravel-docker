@@ -1,26 +1,40 @@
 <?php
 
+namespace App\DataSource\Database;
 
-namespace App\DataSource\database;
-
-
+use App\Models\Coin;
+use Exception;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 
 class CoinDataSource{
 
-    public function getCoinById(String $id){
-        return DB::table('coins')->where('coin_id',$id)->first();
+    public function getCoinById(String $coin_id):Coin{
+        $coin = Coin::query()->where('coin_id', $coin_id)->first();
+        if (is_null($coin)) {
+            throw new Exception('Coin not found');
+        }
+        return $coin;
+        //return DB::table('coins')->where('coin_id',$id)->first();
     }
 
-    public function getCoinNameById(String $id): String{
-        $coin = $this->getCoinById($id);
+    public function getCoinNameById(String $coin_id): String{
+        $coin = Coin::query()->where('coin_id', $coin_id)->first();
+        if (is_null($coin)) {
+            throw new Exception('Coin not found');
+        }
         return $coin->name;
+        //$coin = $this->getCoinById($id);
+        //return $coin->name;
     }
 
-    public function getCoinSymbolById(String $id): String{
-        $coin = $this->getCoinById($id);
-        return $coin->symbol;
+    public function getCoinSymbolById(String $coin_id): String{
+        //$coin = $this->getCoinById($id);
+        //return $coin->symbol;
+        $coin = Coin::query()->where('coin_id', $coin_id)->first();
+        if (is_null($coin)) {
+            throw new Exception('Coin not found');
+        }
+        return $coin->name;
     }
 
    public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price){

@@ -14,8 +14,8 @@ class CreateCoinsTable extends Migration
     public function up()
     {
         Schema::create('coins', function (Blueprint $table) {
-            $table->string('coin_id')->primary();
-            $table->string('nameCoin')->unique();
+            $table->string('coin_id');
+            $table->string('nameCoin');
             $table->string('symbol');
             $table->string('wallet_id');
             //$table->foreign('wallet_id')->references('wallet_id')->on('wallets');

@@ -1,10 +1,7 @@
 <?php
 
-
 namespace App\Services;
 
-
-use App\DataSource\database\CoinDataSource;
 use App\DataSource\database\WalletDataSource;
 
 class GetWalletService{
