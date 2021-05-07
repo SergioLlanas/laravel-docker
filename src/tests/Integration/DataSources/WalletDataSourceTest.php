@@ -4,6 +4,7 @@ namespace Tests\Integration\DataSources;
 
 use App\DataSource\Database\WalletDataSource;
 use App\Models\Wallet;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,6 +21,19 @@ class WalletDataSourceTest extends TestCase{
 
         $this->assertInstanceOf(Wallet::class, $wallet);
     }
+
+    /** @test */
+    public function noWalletFoundForTheGivenId(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        try{
+            $walletDataSource->getWalletById('9');
+        }catch (Exception $exception) {
+            $this->assertEquals('Wallet not found', $exception->getMessage());
+        }
+    }
+
 
     /** @test */
     public function getWalletWithMaxId(){
