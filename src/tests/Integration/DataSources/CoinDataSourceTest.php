@@ -32,13 +32,13 @@ class CoinDataSourceTest extends TestCase
     }
 
     /** @test */
-   /* public function getCoinSymbolById(){
+    public function getCoinSymbolById(){
         Coin::factory(Coin::class)->create();
         $coinDataSource = new CoinDataSource();
 
-        $coin = $coinDataSource->getCoinById('1');
+        $coin = $coinDataSource->getCoinSymbolById('1');
 
-        $this->assertInstanceOf('BTC', $coin);
-    }*/
+        $this->assertEquals('BIT', $coin);
+    }
 
 }

@@ -27,13 +27,11 @@ class CoinDataSource{
     }
 
     public function getCoinSymbolById(String $coin_id): String{
-        //$coin = $this->getCoinById($id);
-        //return $coin->symbol;
         $coin = Coin::query()->where('coin_id', $coin_id)->first();
         if (is_null($coin)) {
             throw new Exception('Coin not found');
         }
-        return $coin->name;
+        return $coin->symbol;
     }
 
    public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price){
