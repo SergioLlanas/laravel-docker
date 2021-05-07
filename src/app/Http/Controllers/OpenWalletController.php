@@ -36,6 +36,6 @@ class OpenWalletController extends BaseController {
         return response()->json([
             'wallet_id' => $walletWithMaxId
         ], Response::HTTP_OK);
-        // TODO: Implement __invoke() method.
+
     }
 }

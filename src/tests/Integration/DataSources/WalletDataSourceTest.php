@@ -2,15 +2,13 @@
 
 namespace Tests\Integration\DataSources;
 
-
 use App\DataSource\Database\WalletDataSource;
-use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class WalletDataSourceTest extends TestCase
-{
+class WalletDataSourceTest extends TestCase{
+
     use RefreshDatabase;
 
     /** @test */
@@ -22,4 +20,15 @@ class WalletDataSourceTest extends TestCase
 
         $this->assertInstanceOf(Wallet::class, $wallet);
     }
+
+    /** @test */
+    public function getWalletWithMaxId(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        $wallet = $walletDataSource->getWalletWithMaxId();
+
+        $this->assertInstanceOf(Wallet::class, $wallet);
+    }
+
 }
