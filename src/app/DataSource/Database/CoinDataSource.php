@@ -22,9 +22,8 @@ class CoinDataSource{
         if (is_null($coin)) {
             throw new Exception('Coin not found');
         }
-        return $coin->name;
-        //$coin = $this->getCoinById($id);
-        //return $coin->name;
+        return $coin->nameCoin;
+
     }
 
     public function getCoinSymbolById(String $coin_id): String{
