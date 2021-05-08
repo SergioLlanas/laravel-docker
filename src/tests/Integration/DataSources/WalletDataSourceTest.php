@@ -34,7 +34,6 @@ class WalletDataSourceTest extends TestCase{
         }
     }
 
-
     /** @test */
     public function getWalletWithMaxId(){
         Wallet::factory(Wallet::class)->create();
@@ -46,15 +45,25 @@ class WalletDataSourceTest extends TestCase{
     }
 
     /** @test */
-    /*public function createNewWalletWithUserId(){
+    /*public function noWalletFoundForMaxId(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+        try{
+            $wallet = $walletDataSource->getWalletWithMaxId();
+        }catch (Exception $exception) {
+            $this->assertEquals('Wallet not found', $exception->getMessage());
+        }
+    }*/
+
+    /** @test */
+    public function createNewWalletWithUserId(){
         Wallet::factory(Wallet::class)->create();
         $walletDataSource = new WalletDataSource();
 
         $wallet = $walletDataSource->createNewWalletWithUserId('25');
 
         $this->assertTrue($wallet);
-        //$this->assertInstanceOf(Wallet::class, $wallet);
-    }*/
+    }
 
 
 }

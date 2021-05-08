@@ -5,8 +5,6 @@ namespace App\DataSource\Database;
 
 use App\Models\Wallet;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class WalletDataSource
 {
@@ -20,18 +18,15 @@ class WalletDataSource
     }
 
     public function getWalletWithMaxId():Wallet{
-        $wallet = Wallet::orderBy('wallet_id', 'desc')->first();
-            if(is_null($wallet)){
-                throw new Exception('Wallet not found');
-            }
+        $wallet = Wallet::query()->orderBy('wallet_id', 'desc')->first();
+        if(is_null($wallet)){
+            throw new Exception('Wallet not found');
+        }
         return $wallet;
     }
 
     public function createNewWalletWithUserId(String $user_id){
-        Wallet::query()->insert(array('user_id' => $user_id));
-
-        //DB::insert('insert into wallets (user_id) values (?)',[$user_id]);
-        //DB::commit();
-        //DB::insert('insert into wallets (user_id) values ('. $userId. ')');
+        $wallet = Wallet::query()->insert(array('wallet_id' => '5','user_id' => $user_id));
+        return $wallet;
     }
 }
