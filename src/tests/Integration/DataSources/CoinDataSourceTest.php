@@ -66,4 +66,16 @@ class CoinDataSourceTest extends TestCase
         $this->assertEquals('BIT', $coin);
     }
 
+    /** @test */
+    public function noCoinSymbolCaughtById(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->getCoinById('2');
+        }catch (Exception $exception){
+            $this->assertEquals('Coin not found', $exception->getMessage());
+        }
+    }
+
 }
