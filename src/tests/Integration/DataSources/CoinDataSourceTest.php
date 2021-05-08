@@ -32,10 +32,7 @@ class CoinDataSourceTest extends TestCase
         }catch (Exception $exception){
             $this->assertEquals('Coin not found', $exception->getMessage());
         }
-
     }
-
-
 
     /** @test */
     public function getCoinNameById(){
@@ -45,6 +42,18 @@ class CoinDataSourceTest extends TestCase
         $coin = $coinDataSource->getCoinNameById('1');
 
         $this->assertEquals('Bitcoin', $coin);
+    }
+
+    /** @test */
+    public function noCoinNameCaughtById(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->getCoinById('2');
+        }catch (Exception $exception){
+            $this->assertEquals('Coin not found', $exception->getMessage());
+        }
     }
 
     /** @test */
