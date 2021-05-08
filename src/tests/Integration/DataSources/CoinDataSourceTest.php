@@ -4,6 +4,7 @@ namespace Tests\Integration\DataSources;
 
 use App\DataSource\Database\CoinDataSource;
 use App\Models\Coin;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,6 +21,21 @@ class CoinDataSourceTest extends TestCase
 
         $this->assertInstanceOf(Coin::class, $coin);
     }
+
+    /** @test */
+    public function noCoinCaughtById(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->getCoinById('2');
+        }catch (Exception $exception){
+            $this->assertEquals('Coin not found', $exception->getMessage());
+        }
+
+    }
+
+
 
     /** @test */
     public function getCoinNameById(){
