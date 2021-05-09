@@ -26,7 +26,8 @@ class BuyCoinController extends BaseController{
     public function __invoke(Request $request){
         $coin_id = $request->input("coin_id");
         $wallet_id = $request->input("wallet_id");
-        $amount_usd = $request->input("amount_usd");
+        $amount_usdString = $request->input("amount_usd");
+        $amount_usd = doubleval($amount_usdString);
 
         $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
         $obj = json_decode($json);

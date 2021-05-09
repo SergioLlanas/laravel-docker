@@ -29,7 +29,7 @@ class GetWalletController extends BaseController
     public function __invoke(String $idWallet): JsonResponse{
 
         try {
-            //$isEarlyAdopter = $this->isEarlyAdopterService->execute($email);
+            
             $wallet = $this->walletService->execute($idWallet);
             $coinName = $this->coinService->getCoinName($wallet->coin_id);
             $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);

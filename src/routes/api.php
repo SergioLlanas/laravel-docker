@@ -57,3 +57,8 @@ Route::post(
     BuyCoinController::class
 );
 
+Route::post(
+    '/coin/sell',
+    SellCoinController::class
+);
+
