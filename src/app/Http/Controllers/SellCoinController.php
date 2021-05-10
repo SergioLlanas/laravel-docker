@@ -33,8 +33,8 @@ class SellCoinController extends BaseController{
         $amount_coinIHave = $coinDAO->getAmountCoinByIdAndWallet($coin_id,$wallet_id);
         $newAmount = $amount_coinIHave - $amount_coin;
 
-        $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
-        $obj = json_decode($json);
+       // $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
+        //$obj = json_decode($json);
 
         if($this->sellCoinService->getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell($amount_coin,$coin_id,$wallet_id)){
             $coinDAO->updateAmountCoinById($coin_id,$newAmount,$wallet_id);
