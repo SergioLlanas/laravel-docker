@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\DataSource\Database\CoinDataSource;
+use App\DataSource\Database\WalletDataSource;
 use PhpParser\Node\Expr\Cast\Double;
 
 class SellCoinService{
@@ -43,4 +44,15 @@ class SellCoinService{
         return true;
     }
 
+    public function getUSDWhenISell($amount_coin,$coin_id){
+        $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
+        $obj = json_decode($json);
+        $sellPrice = $obj[0]->price_usd;
+        return $amount_coin * $sellPrice;
+    }
+
+    public function updateTransactionBalance($wallet_id){
+        $walletDAO = new WalletDataSource();
+        $walletDAO->updateTransactionBalanceOfWalletIdWhenISell($wallet_id);
+    }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 
 use App\DataSource\database\CoinDataSource;
+use App\DataSource\Database\WalletDataSource;
+use App\Services\BuyCoinService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -14,13 +16,23 @@ class BuyCoinController extends BaseController{
      * @var CoinDataSource
      */
     private $coinDAO;
+    /**
+     * @var WalletDataSource
+     */
+    private $walletDAO;
+    /**
+     * @var BuyCoinService
+     */
+    private $buyService;
 
 
     /**
      * BuyCoinController constructor.
      */
-    public function __construct(CoinDataSource $coinDAO){
+    public function __construct(CoinDataSource $coinDAO,WalletDataSource $walletDAO,BuyCoinService $buyService){
         $this->coinDAO = $coinDAO;
+        $this->walletDAO = $walletDAO;
+        $this->buyService = $buyService;
     }
 
     public function __invoke(Request $request){
@@ -35,7 +47,15 @@ class BuyCoinController extends BaseController{
         $name = $obj[0]->name;
         $symbol = $obj[0]->symbol;
 
-        $this->coinDAO->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);
+        if(!$this->buyService->checkIfIHaveThisCoin($coin_id)){
+            $this->walletDAO->updateTransactionBalanceOfWalletIdWhenIBuy($amount_usd,$wallet_id);
+            $this->coinDAO->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);
+        }else{
+            $this->walletDAO->updateTransactionBalanceOfWalletIdWhenIBuy($amount_usd,$wallet_id);
+            $this->coinDAO->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/$buyPrice,$wallet_id);
+        }
+
+
 
         // TODO: Implement __invoke() method.
     }

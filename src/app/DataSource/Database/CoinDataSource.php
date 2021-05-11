@@ -40,7 +40,6 @@ class CoinDataSource{
            'nameCoin' => $name,
            'symbol' => $symbol,
            'wallet_id' => $wallet_id,
-           'buy_price' => $buy_price,
            'amount_coins' => $amount_usd/$buy_price
        ]);
    }
@@ -56,8 +55,13 @@ class CoinDataSource{
 
    }
 
-   public function updateAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){
-        DB::update('update coins set amount_coins = "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
+   public function incrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){
+        DB::update('update coins set amount_coins = amount_coins + "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
    }
+
+    public function decrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){
+        DB::update('update coins set amount_coins = amount_coins - "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
+    }
+
 
 }
