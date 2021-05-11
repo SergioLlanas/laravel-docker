@@ -29,19 +29,14 @@ class SellCoinController extends BaseController{
         $walletDAO = new WalletDataSource();
         $coinDAO = new CoinDataSource();
         $coin_id = $request->input("coin_id");
-        var_dump($coin_id);
         $wallet_id = $request->input("wallet_id");
-        var_dump($wallet_id);
         $amount_coinString = $request->input("amount_coin");
-        var_dump($amount_coinString);
         $amount_coin = doubleval($amount_coinString);
-        $amount_coinIHave = $coinDAO->getAmountCoinByIdAndWallet($coin_id,$wallet_id);
-        $newAmount = $amount_coinIHave - $amount_coin;
 
 
         if($this->sellCoinService->getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell($amount_coin,$coin_id,$wallet_id)){
-            $coinDAO->decrementAmountCoinByIdAndWallet($coin_id,$newAmount,$wallet_id);
-            $walletDAO->updateTransactionBalanceOfWalletIdWhenISell($amount_usd,$wallet_id);
+            $coinDAO->decrementAmountCoinByIdAndWallet($coin_id,$amount_coin,$wallet_id);
+            $walletDAO->updateTransactionBalanceOfWalletIdWhenISell($this->sellCoinService->getUSDWhenISell($amount_coin,$coin_id),$wallet_id);
         }else{
             echo "Error en la transaccion";
         }
