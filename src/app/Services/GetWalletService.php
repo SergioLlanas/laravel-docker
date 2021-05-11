@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DataSource\database\WalletDataSource;
+use App\DataSource\Database\WalletDataSource;
 use App\Models\Wallet;
 
 class GetWalletService{
@@ -19,6 +19,7 @@ class GetWalletService{
     }
 
     public function open(String $user_id):Wallet{
+        /* Crearlo y que directamente me devuelva el id */
         $this->walletDataSource->createNewWalletWithUserId($user_id);
         $wallet = $this->walletDataSource->getWalletWithMaxId();
         if($wallet == null){

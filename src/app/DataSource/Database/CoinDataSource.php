@@ -3,6 +3,7 @@
 namespace App\DataSource\Database;
 
 use App\Models\Coin;
+use App\Models\Wallet;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\Double;
@@ -34,16 +35,6 @@ class CoinDataSource{
         return $coin->symbol;
     }
 
-    public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price){
-       DB::table('coins')->insert([
-           'coin_id' => $coin_id,
-           'nameCoin' => $name,
-           'symbol' => $symbol,
-           'wallet_id' => $wallet_id,
-           'amount_coins' => $amount_usd/$buy_price
-       ]);
-   }
-
     public function getAmountCoinByIdAndWallet(String $coin_id,String $wallet_id):Float{
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
         if(is_null($coin)){
@@ -52,14 +43,23 @@ class CoinDataSource{
         return floatval($coin->amount_coins);
 
 
-       //$coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" order by amount_coins desc');
-       /*var_dump($coin);
-       if (is_null($coin)) {
-           throw new Exception('Coin not found');
-       }else{
-           return $coin[0]->amount_coins;
-       }*/
+        //$coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" order by amount_coins desc');
+        /*var_dump($coin);
+        if (is_null($coin)) {
+            throw new Exception('Coin not found');
+        }else{
+            return $coin[0]->amount_coins;
+        }*/
 
+    }
+
+    /*** FALTAN ***/
+    public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price):String{
+        $coin = Coin::query()->insertGetId(array(
+            'coin_id' => $coin_id, 'nameCoin' => $name, 'symbol' => $symbol,
+            'wallet_id' => $wallet_id, 'amount_coins' => $amount_usd/$buy_price
+        ));
+        return $coin;
    }
 
     public function incrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){

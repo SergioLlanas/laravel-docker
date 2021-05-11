@@ -25,7 +25,8 @@ class WalletFactory extends Factory
     {
         return [
             'wallet_id' => '1',
-            'user_id' => '25'
+            'user_id' => '25',
+            'transaction_balance' => 25.99
         ];
     }
 }

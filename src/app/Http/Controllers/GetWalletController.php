@@ -29,16 +29,29 @@ class GetWalletController extends BaseController
     public function __invoke(String $idWallet): JsonResponse{
 
         try {
-            
-            $wallet = $this->walletService->execute($idWallet);
-            $coinName = $this->coinService->getCoinName($wallet->coin_id);
-            $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);
-
+            $wallet = $this->walletService->find($idWallet);
         } catch (Exception $exception) {
             return response()->json([
-                'error' => $exception->getMessage()
+                'errorWallet' => $exception->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        try{
+            $coinName = $this->coinService->getCoinName($wallet->coin_id);
+        } catch (Exception $exception) {
+            return response()->json([
+                'errorCoinName' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        try{
+            $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);
+        } catch (Exception $exception) {
+            return response()->json([
+                'errorCoinSymbol' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         return response()->json([
             'coin_id' => $wallet->coin_id,
             'name' => $coinName,

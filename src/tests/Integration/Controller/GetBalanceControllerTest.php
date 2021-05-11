@@ -2,21 +2,23 @@
 
 namespace Tests\Integration\Controller;
 
+use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class GetBalanceControllerTest extends TestCase
-{
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
+class GetBalanceControllerTest extends TestCase{
 
-        $response->assertStatus(200);
+    use RefreshDatabase;
+
+    /** @test */
+    public function getBalanceByWalletId(){
+        Wallet::factory(Wallet::class)->create();
+
+        $response = $this->get('api/wallet/2/balance');
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Wallet not found']);
+
     }
 }

@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\DataSource\database\CoinDataSource;
+use App\DataSource\Database\CoinDataSource;
 
 class GetCoinService{
 

@@ -23,11 +23,11 @@ class CoinFactory extends Factory{
     public function definition()
     {
         return [
+            'id_transaction' => 1,
             'coin_id' => '1',
             'nameCoin' => 'Bitcoin',
             'symbol' => 'BIT',
             'wallet_id' => '1',
-            'buy_price' => 5.2,
             'amount_coins' => 25.4
         ];
     }

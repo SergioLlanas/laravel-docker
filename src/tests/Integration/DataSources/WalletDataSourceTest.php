@@ -48,6 +48,7 @@ class WalletDataSourceTest extends TestCase{
     /*public function noWalletFoundForMaxId(){
         Wallet::factory(Wallet::class)->create();
         $walletDataSource = new WalletDataSource();
+
         try{
             $wallet = $walletDataSource->getWalletWithMaxId();
         }catch (Exception $exception) {
@@ -62,7 +63,7 @@ class WalletDataSourceTest extends TestCase{
 
         $wallet = $walletDataSource->createNewWalletWithUserId('25');
 
-        $this->assertTrue($wallet);
+        $this->assertEquals('2', $wallet);
     }
 
 

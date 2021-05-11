@@ -88,7 +88,6 @@ class CoinDataSourceTest extends TestCase{
     }
 
     /** @test */
-
     public function noAmountCoinByIdAndWallet(){
         Coin::factory(Coin::class)->create();
         $coinDataSource = new CoinDataSource();
@@ -98,6 +97,16 @@ class CoinDataSourceTest extends TestCase{
         }catch (Exception $exception){
             $this->assertEquals('Coin not found', $exception->getMessage());
         }
+    }
+
+    /** @test */
+    public function doNewTransaction(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->doNewTransaction('1', '2', 25, 'bitcoin', 'BIT', 25);
+
+        $this->assertEquals('2', $coin);
     }
 
 }
