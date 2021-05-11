@@ -46,7 +46,8 @@ class CoinDataSource{
    }
 
    public function getAmountCoinByIdAndWallet(String $coin_id,String $walletId){
-       $coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
+       $coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" order by amount_coins desc');
+       var_dump($coin);
        if (is_null($coin)) {
            throw new Exception('Coin not found');
        }else{

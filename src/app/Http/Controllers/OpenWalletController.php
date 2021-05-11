@@ -34,7 +34,7 @@ class OpenWalletController extends BaseController {
 
 
         return response()->json([
-            'wallet_id' => $walletWithMaxId
+            'wallet_id' => $walletWithMaxId->wallet_id
         ], Response::HTTP_OK);
 
 

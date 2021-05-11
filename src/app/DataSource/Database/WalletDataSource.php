@@ -26,7 +26,7 @@ class WalletDataSource
     }
 
     public function createNewWalletWithUserId(String $user_id){
-        $wallet = Wallet::query()->insert(array('wallet_id' => '5','user_id' => $user_id));
+        $wallet = Wallet::query()->insert(array('user_id' => $user_id,'transaction_balance' => 0.00));
         return $wallet;
     }
 }
