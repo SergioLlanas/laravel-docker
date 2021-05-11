@@ -8,8 +8,8 @@ use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CoinDataSourceTest extends TestCase
-{
+class CoinDataSourceTest extends TestCase{
+
     use RefreshDatabase;
 
     /** @test */
@@ -78,4 +78,26 @@ class CoinDataSourceTest extends TestCase
         }
     }
 
+    /** @test */
+    public function getAmountCoinByIdAndWallet(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->getAmountCoinByIdAndWallet('1', '1');
+        $this->assertEquals(25.4, $coin);
+    }
+
+    /** @test */
+/*
+    public function noAmountCoinByIdAndWallet(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->getAmountCoinByIdAndWallet('2', '1');
+        }catch (Exception $exception){
+            $this->assertEquals('Coin not found', $exception->getMessage());
+        }
+    }
+*/
 }
