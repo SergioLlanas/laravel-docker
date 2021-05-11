@@ -49,8 +49,10 @@ class CoinDataSource{
        $coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
        if (is_null($coin)) {
            throw new Exception('Coin not found');
+       }else{
+           return $coin[0]->amount_coins;
        }
-       return $coin->amout_coins;
+
    }
 
    public function updateAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){

@@ -27,18 +27,20 @@ class SellCoinController extends BaseController{
     public function __invoke(Request $request){
         $coinDAO = new CoinDataSource();
         $coin_id = $request->input("coin_id");
+        var_dump($coin_id);
         $wallet_id = $request->input("wallet_id");
+        var_dump($wallet_id);
         $amount_coinString = $request->input("amount_coin");
+        var_dump($amount_coinString);
         $amount_coin = doubleval($amount_coinString);
         $amount_coinIHave = $coinDAO->getAmountCoinByIdAndWallet($coin_id,$wallet_id);
         $newAmount = $amount_coinIHave - $amount_coin;
 
        // $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
-        //$obj = json_decode($json);
+        //  $obj = json_decode($json);
 
         if($this->sellCoinService->getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell($amount_coin,$coin_id,$wallet_id)){
-            $coinDAO->updateAmountCoinById($coin_id,$newAmount,$wallet_id);
-            echo "Hola se supone que he hecho la transaccion";
+            $coinDAO->updateAmountCoinByIdAndWallet($coin_id,$newAmount,$wallet_id);
         }else{
             echo "Error en la transaccion";
         }

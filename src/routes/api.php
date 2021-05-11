@@ -6,6 +6,7 @@ use App\Http\Controllers\GetBalanceController;
 use App\Http\Controllers\GetUserController;
 use App\Http\Controllers\GetWalletController;
 use App\Http\Controllers\OpenWalletController;
+use App\Http\Controllers\SellCoinController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

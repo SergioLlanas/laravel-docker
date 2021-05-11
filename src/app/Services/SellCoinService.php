@@ -36,7 +36,7 @@ class SellCoinService{
         $coinDAO = new CoinDataSource();
         $amount_coinIHave = $coinDAO->getAmountCoinByIdAndWallet($coin_id,$walletId);
         $difference = $amount_coinIHave - $amount_coin;
-        echo "Esta es la diferencia: " . $difference;
+
         if($difference < 0){
             return false;
         }
