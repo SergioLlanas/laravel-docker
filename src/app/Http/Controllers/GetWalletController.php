@@ -27,49 +27,36 @@ class GetWalletController extends BaseController
     }
 
     public function __invoke(String $idWallet): JsonResponse{
-
-        try {
+        var_dump($idWallet);
+        echo "<br><br><br><br><br><br><br><br>";
+        //$walletCoins = $this->walletService->getWalletCoins($idWallet);
+        /*try {
             $wallet = $this->walletService->find($idWallet);
         } catch (Exception $exception) {
             return response()->json([
                 'errorWallet' => $exception->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
-
+        var_dump($wallet);
+        echo "<br><br><br><br><br><br><br><br>";*/
         try{
-            $coinName = $this->coinService->getCoinName($wallet->coin_id);
+            $walletCoins = $this->walletService->getWalletCoins($idWallet);
+            //print_r($walletCoins);
+            //var_dump($walletCoins);
         } catch (Exception $exception) {
             return response()->json([
-                'errorCoinName' => $exception->getMessage()
+                'errorGetCoins' => $exception->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
+        //$json = null;
 
-        try{
-            $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);
-        } catch (Exception $exception) {
-            return response()->json([
-                'errorCoinSymbol' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        /*$json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$wallet->$coin_id) ;
+        $obj = json_decode($json);
+        $sellPrice = $obj[0]->price_usd;*/
 
         return response()->json([
-            'coin_id' => $wallet->coin_id,
-            'name' => $coinName,
-            'symbol' => $coinSymbol,
-            'amount' => $wallet->amount_coins,
-            'value_usd' => $wallet->buy_price
+            'wallet-data' => $walletCoins,
         ], Response::HTTP_OK);
 
-
-       /*$wallet = $this->walletService->execute($idWallet);
-       $coinName = $this->coinService->getCoinName($wallet->coin_id);
-       $coinSymbol = $this->coinService->getCoinSymbol($wallet->coin_id);*/
-        /*return response()->json([
-            'coin_id' => $wallet->coin_id,
-            'name' => $coinName,
-            'symbol' => $coinSymbol,
-            'amount' => $wallet->amount_coins,
-            'value_usd' => $wallet->buy_price
-        ], Response::HTTP_OK);*/
     }
 }

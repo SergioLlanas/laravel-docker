@@ -5,6 +5,7 @@ namespace App\DataSource\Database;
 use App\Models\Coin;
 use App\Models\Wallet;
 use Exception;
+use http\QueryString;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\Double;
 
@@ -17,6 +18,15 @@ class CoinDataSource{
         }
         return $coin;
         //return DB::table('coins')->where('coin_id',$id)->first();
+    }
+
+    public function getCoinsByWalletId(String $wallet_id){
+        $coins = DB::table('coins')->where('wallet_id', $wallet_id)->get();
+        /*$coins = Coin::query()->where('wallet_id',$wallet_id);*/
+        if (is_null($coins)){
+            throw new Exception('Coin not found');
+        }
+        return $coins;
     }
 
     public function getCoinNameById(String $coin_id): String{
