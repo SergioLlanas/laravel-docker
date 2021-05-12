@@ -100,6 +100,28 @@ class CoinDataSourceTest extends TestCase{
     }
 
     /** @test */
+    public function getAllCoinsForGivenWalletId(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->getCoinsByWalletId('1');
+
+        $this->assertEquals(1, $coin->count());
+    }
+
+    /** @test */
+    public function noCoinsForGivenWalletId(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->getCoinsByWalletId('2');
+        $coin2 = $coinDataSource->getCoinsByWalletId(' ');
+
+        $this->assertEquals(0, $coin->count());
+        $this->assertEquals(0, $coin2->count());
+    }
+
+    /** @test */
     public function doNewTransaction(){
         Coin::factory(Coin::class)->create();
         $coinDataSource = new CoinDataSource();
@@ -107,6 +129,126 @@ class CoinDataSourceTest extends TestCase{
         $coin = $coinDataSource->doNewTransaction('1', '2', 25, 'bitcoin', 'BIT', 25);
 
         $this->assertEquals('2', $coin);
+    }
+
+    /** @test */
+    public function newTransactionNotDone(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->doNewTransaction(' ', '2', 25, 'bitcoin', 'BIT', 25);
+        }catch (Exception $exception){
+            $this->assertEquals('Transaction not done', $exception->getMessage());
+        }
+        try{
+            $coinDataSource->doNewTransaction('1', '', 25, 'bitcoin', 'BIT', 25);
+        }catch (Exception $exception){
+            $this->assertEquals('Transaction not done', $exception->getMessage());
+        }
+        try{
+            $coinDataSource->doNewTransaction('1', '2', -5, 'bitcoin', 'BIT', 25);
+        }catch (Exception $exception){
+            $this->assertEquals('Transaction not done', $exception->getMessage());
+        }
+        try{
+            $coinDataSource->doNewTransaction('1', '2', 5, '', 'BIT', 25);
+        }catch (Exception $exception){
+            $this->assertEquals('Transaction not done', $exception->getMessage());
+        }
+
+    }
+
+    /** @test */
+    public function incrementAmountCoinForGivenIds(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->incrementAmountCoinByIdAndWallet('1', 15, '1');
+
+        $this->assertTrue($coin);
+    }
+
+    /** @test */
+    public function incrementAmountCoinForGivenIdsNotDone(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->incrementAmountCoinByIdAndWallet('15', -5, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->incrementAmountCoinByIdAndWallet('  ', -5, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->incrementAmountCoinByIdAndWallet('  ', 25, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->incrementAmountCoinByIdAndWallet('1', 25, '5');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->incrementAmountCoinByIdAndWallet('1', -25, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+    }
+
+    /** @test */
+    public function decrementAmountCoinForGivenIds(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        $coin = $coinDataSource->decrementAmountCoinByIdAndWallet('1', 15, '1');
+
+        $this->assertTrue($coin);
+    }
+
+    /** @test */
+    public function decrementAmountCoinForGivenIdsNotDone(){
+        Coin::factory(Coin::class)->create();
+        $coinDataSource = new CoinDataSource();
+
+        try{
+            $coinDataSource->decrementAmountCoinByIdAndWallet('15', -5, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->decrementAmountCoinByIdAndWallet('  ', -5, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->decrementAmountCoinByIdAndWallet('  ', 25, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->decrementAmountCoinByIdAndWallet('1', 25, '5');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
+
+        try{
+            $coinDataSource->decrementAmountCoinByIdAndWallet('1', -25, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Amount coin not updated', $exception->getMessage());
+        }
     }
 
 }

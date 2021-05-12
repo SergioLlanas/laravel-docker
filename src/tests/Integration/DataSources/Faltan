@@ -1,13 +1,2 @@
-WalletDataSource:
-    - noWalletFoundForMaxId (cuando no hay ninguna añadida e intenta buscar el max id)
-    - noNewWalletCreatedForAnUserId (cuando no ha sido posible crear la cartera)
-    - updateTransactionBalanceOfWalletIdWhenIBuy
-    - transactionBalanceNotUpdatedForWalletIdWhenIBuy
-    - updateTransactionBalanceOfWalletIdWhenISell
-    - transactionBalanceNotUpdatedForWalletIdWhenISell
-CoinDataSourceTest:
-    - incrementAmountCoinByIdAndWallet
-    - noIncrementAmountCoinByIdAndWallet
-    - decrementAmountCoinByIdAndWallet
-    - noDecrementAmountCoinByIdAndWallet
-    - newTransactionNotDone
+Hay que comprobar que a las funciones se les pasan bien todos los parámetros.
+Pruebas para todos los tipos de errores, que en algunos faltan casos

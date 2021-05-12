@@ -3,11 +3,7 @@
 namespace App\DataSource\Database;
 
 use App\Models\Coin;
-use App\Models\Wallet;
 use Exception;
-use http\QueryString;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Double;
 
 class CoinDataSource{
 
@@ -18,15 +14,6 @@ class CoinDataSource{
         }
         return $coin;
         //return DB::table('coins')->where('coin_id',$id)->first();
-    }
-
-    public function getCoinsByWalletId(String $wallet_id){
-        $coins = DB::table('coins')->where('wallet_id', $wallet_id)->get();
-        /*$coins = Coin::query()->where('wallet_id',$wallet_id);*/
-        if (is_null($coins)){
-            throw new Exception('Coin not found');
-        }
-        return $coins;
     }
 
     public function getCoinNameById(String $coin_id): String{
@@ -51,20 +38,22 @@ class CoinDataSource{
             throw new Exception('Coin not found');
         }
         return floatval($coin->amount_coins);
-
-
-        //$coin = DB::select('select * from coins where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" order by amount_coins desc');
-        /*var_dump($coin);
-        if (is_null($coin)) {
-            throw new Exception('Coin not found');
-        }else{
-            return $coin[0]->amount_coins;
-        }*/
-
     }
 
-    /*** FALTAN ***/
+    public function getCoinsByWalletId(String $wallet_id){
+        //$coins = DB::table('coins')->where('wallet_id', $wallet_id)->get();
+        $coins = Coin::query()->where('wallet_id',$wallet_id);
+        if (is_null($coins)){
+            throw new Exception('Coin not found');
+        }
+        return $coins;
+    }
+
     public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price):String{
+        if(is_null($coin_id) || trim($coin_id) === '' || is_null($wallet_id) || trim($wallet_id) === '' ||is_null($name) || trim($name) === ''
+        || is_null($symbol) || trim($symbol) || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
+            throw new Exception('Transaction not done');
+        }
         $coin = Coin::query()->insertGetId(array(
             'coin_id' => $coin_id, 'nameCoin' => $name, 'symbol' => $symbol,
             'wallet_id' => $wallet_id, 'amount_coins' => $amount_usd/$buy_price
@@ -72,12 +61,39 @@ class CoinDataSource{
         return $coin;
    }
 
-    public function incrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){
-        DB::update('update coins set amount_coins = amount_coins + "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
+    public function incrementAmountCoinByIdAndWallet(String $coin_id, float $amount_coin, String $walletId): bool{
+        if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
+            throw new Exception('Amount coin not updated');
+        }
+
+        $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $walletId)->first();
+        if(is_null($coin)){
+            throw new Exception('Amount coin not updated');
+        }
+
+        Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $walletId)->update(['amount_coins' => $coin->amount_coins + $amount_coin]);
+
+        $updateCoin = Coin::query()->where('wallet_id', $walletId)->where('coin_id', $coin_id)->first();
+        return ($updateCoin->amount_coins !== $coin->amount_coins);
+
+
+        //DB::update('update coins set amount_coins = amount_coins + "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
    }
 
-    public function decrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId){
-        DB::update('update coins set amount_coins = amount_coins - "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
+    public function decrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId):bool{
+        if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
+            throw new Exception('Amount coin not updated');
+        }
+        $coin = Coin::query()->where('wallet_id', $walletId)->where('coin_id', $coin_id)->first();
+        if(is_null($coin)){
+            throw new Exception('Amount coin not updated');
+        }
+        Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $walletId)->update(['amount_coins' => $coin->amount_coins - $amount_coin]);
+
+        $updateCoin = Coin::query()->where('wallet_id', $walletId)->where('coin_id', $coin_id)->first();
+        return ($updateCoin->amount_coins !== $coin->amount_coins);
+
+        //DB::update('update coins set amount_coins = amount_coins - "'.$amount_coin.'" where coin_id = "'.$coin_id.'" and wallet_id = "'.$walletId.'" ');
     }
 
 }
