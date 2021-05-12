@@ -21,21 +21,33 @@ class GetBalanceController extends BaseController {
         $this->walletService = $walletService;
     }
 
-    public function __invoke(String $wallet_id): JsonResponse{
+    public function __invoke(String $idWallet): JsonResponse{
+        $amountUsdCoinsIHave = 0;
+        $totalBalance = 0;
+
         try{
-            $wallet = $this->walletService->find($wallet_id);
-            $buyprice = $wallet->buy_price;
-            $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=90") ;
+            $walletCoins = $this->walletService->getWalletCoins($idWallet);
+            //print_r($walletCoins);
+            //var_dump($walletCoins);
+        } catch (Exception $exception) {
+            return response()->json([
+                'errorGetCoins' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        foreach ($walletCoins as $coin){
+            $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin->coin_id) ;
             $obj = json_decode($json);
             $actualPrice = $obj[0]->price_usd;
-            $balance = $actualPrice - $buyprice;
-        }catch(Exception $exception){
-            return response()->json([
-               'error' => $exception->getMessage()
-            ]);
+            $amountUsdCoin = $coin->amount_coins * $actualPrice;
+            $amountUsdCoinsIHave = $amountUsdCoinsIHave + $amountUsdCoin;
         }
+
+        $wallet = $this->walletService->find($idWallet);
+        $totalBalance = $wallet->transaction_balance + $amountUsdCoinsIHave;
+
         return response()->json([
-            "balance_usd" => $balance
+            "balance_usd" => $totalBalance
         ], Response::HTTP_OK);
     }
 }
