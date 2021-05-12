@@ -45,18 +45,6 @@ class WalletDataSourceTest extends TestCase{
     }
 
     /** @test */
-    /*public function noWalletFoundForMaxId(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        try{
-            $wallet = $walletDataSource->getWalletWithMaxId();
-        }catch (Exception $exception) {
-            $this->assertEquals('Wallet not found', $exception->getMessage());
-        }
-    }*/
-
-    /** @test */
     public function createNewWalletWithUserId(){
         Wallet::factory(Wallet::class)->create();
         $walletDataSource = new WalletDataSource();
@@ -66,5 +54,96 @@ class WalletDataSourceTest extends TestCase{
         $this->assertEquals('2', $wallet);
     }
 
+    /** @test */
+    public function walletNotCreatedForNullUser(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        try{
+            $walletDataSource->createNewWalletWithUserId('');
+        }catch (Exception $exception) {
+            $this->assertEquals('Wallet not created', $exception->getMessage());
+        }
+    }
+
+    /** @test */
+    public function updateTransactionBalanceForGivenWalletIdWhenWeBuy(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        $wallet = $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(15, '1');
+
+        $this->assertTrue($wallet);
+    }
+
+    /** @test */
+    public function updateNotDoneForTransactionBalanceForGivenWalletIdWhenWeBuy(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(0, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(-1, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '  ');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+    }
+
+    /** @test */
+    public function updateTransactionBalanceForGivenWalletIdWhenWeSell(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        $wallet = $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(15, '1');
+
+        $this->assertTrue($wallet);
+    }
+
+    /** @test */
+    public function updateNotDoneForTransactionBalanceForGivenWalletIdWhenWeSell(){
+        Wallet::factory(Wallet::class)->create();
+        $walletDataSource = new WalletDataSource();
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(0, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(-1, '1');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+
+        try{
+            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '  ');
+        }catch(Exception $exception){
+            $this->assertEquals('Wallet not updated', $exception->getMessage());
+        }
+    }
 
 }
