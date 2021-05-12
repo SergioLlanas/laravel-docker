@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DataSource\Database\CoinDataSource;
 use App\DataSource\Database\WalletDataSource;
 use App\Models\Wallet;
+use Exception;
 use PhpParser\Node\Scalar\String_;
 
 class GetWalletService{
@@ -28,10 +29,11 @@ class GetWalletService{
 
     public function open(String $user_id):Wallet{
         /* Crearlo y que directamente me devuelva el id */
-        $this->walletDataSource->createNewWalletWithUserId($user_id);
-        $wallet = $this->walletDataSource->getWalletWithMaxId();
-        if($wallet == null){
-            throw new \Exception('Wallet not created');
+        try{
+            $walletId = $this->walletDataSource->createNewWalletWithUserId($user_id);
+            $wallet = $this->walletDataSource->getWalletById($walletId);
+        }catch (Exception $exception){
+            throw new Exception ($exception->getMessage());
         }
         return $wallet;
     }
@@ -47,7 +49,7 @@ class GetWalletService{
     public function getWalletCoins(String $wallet_id){
        $coins = $this->coinDataSource->getCoinsByWalletId($wallet_id);
        if($coins == null){
-           throw new \Exception('Coins not found');
+           throw new Exception('Coins not found');
        }
        return $coins;
     }

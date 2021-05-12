@@ -2,21 +2,23 @@
 
 namespace Tests\Integration\Controller;
 
+use App\Models\Coin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class BuyCoinControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    public function testExample(){
+        Coin::factory(Coin::class)->create();
+
+        $response = $this->postJson('/api/coin/buy',['coin_id' => '1', 'wallet_id' => '1', 'amount_usd'=>10]);
+
+        //$response->assertStatus(Response::HTTP_OK);
+        //$response = $this->get('/');
+
+        //$response->assertStatus(200);
     }
 }

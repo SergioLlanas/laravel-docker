@@ -50,8 +50,9 @@ class CoinDataSource{
     }
 
     public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price):String{
+
         if(is_null($coin_id) || trim($coin_id) === '' || is_null($wallet_id) || trim($wallet_id) === '' ||is_null($name) || trim($name) === ''
-        || is_null($symbol) || trim($symbol) || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
+        || is_null($symbol) || trim($symbol) === '' || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
             throw new Exception('Transaction not done');
         }
         $coin = Coin::query()->insertGetId(array(
