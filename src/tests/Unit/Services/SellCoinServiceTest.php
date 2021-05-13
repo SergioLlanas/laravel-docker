@@ -30,8 +30,7 @@ class SellCoinServiceTest extends TestCase{
      */
     public function testExample(){
         //$response = $this->get('/');
-        $this->sellCoinService->getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell()
-            ->findByEmail($email)->shouldBeCalledOnce()->willReturn($user);
+
         //$response->assertStatus(200);
     }
 }

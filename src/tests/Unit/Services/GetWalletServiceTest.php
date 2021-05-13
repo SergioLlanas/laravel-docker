@@ -7,7 +7,6 @@ use App\DataSource\Database\WalletDataSource;
 use App\Models\Coin;
 use App\Models\Wallet;
 use App\Services\GetWalletService;
-use Illuminate\Database\Eloquent\Model;
 use Prophecy\Prophet;
 use PHPUnit\Framework\TestCase;
 

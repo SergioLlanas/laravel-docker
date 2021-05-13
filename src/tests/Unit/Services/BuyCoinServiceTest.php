@@ -43,6 +43,8 @@ class BuyCoinServiceTest extends TestCase{
         $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(10,'1')->shouldBeCalledOnce()->willReturn(true);
         $this->coinDataSource->incrementAmountCoinByIdAndWallet('1', 10, '1')->shouldBeCalledOnce()->willReturn(true);
 
+        $this->coinDataSource->doNewTransaction('1', '1', 25, 'Bitcoin', 'BTC', 200)->shouldNotHaveBeenCalled()->willReturn(true);
+
         $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('1', '1', 10);
         $this->assertTrue($buyCoinService);
 

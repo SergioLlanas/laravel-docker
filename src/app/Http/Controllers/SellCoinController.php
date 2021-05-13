@@ -33,7 +33,6 @@ class SellCoinController extends BaseController{
         $amount_coinString = $request->input("amount_coin");
         $amount_coin = doubleval($amount_coinString);
 
-
         if($this->sellCoinService->getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell($amount_coin,$coin_id,$wallet_id)){
             $coinDAO->decrementAmountCoinByIdAndWallet($coin_id,$amount_coin,$wallet_id);
             $walletDAO->updateTransactionBalanceOfWalletIdWhenISell($this->sellCoinService->getUSDWhenISell($amount_coin,$coin_id),$wallet_id);
@@ -41,8 +40,6 @@ class SellCoinController extends BaseController{
             echo "Error en la transaccion";
         }
 
-
-        // TODO: Implement __invoke() method.
     }
 
 }
