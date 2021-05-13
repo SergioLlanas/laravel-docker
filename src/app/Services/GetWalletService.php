@@ -6,7 +6,6 @@ use App\DataSource\Database\CoinDataSource;
 use App\DataSource\Database\WalletDataSource;
 use App\Models\Wallet;
 use Exception;
-use PhpParser\Node\Scalar\String_;
 
 class GetWalletService{
 

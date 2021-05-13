@@ -16,7 +16,7 @@ class BuyCoinControllerTest extends TestCase
 
         $response = $this->postJson('/api/coin/buy',['coin_id' => '1', 'wallet_id' => '1', 'amount_usd'=>10]);
 
-        //$response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_OK);
         //$response = $this->get('/');
 
         //$response->assertStatus(200);

@@ -39,19 +39,21 @@ class BuyCoinController extends BaseController{
             'wallet_id' => $wallet
         ], Response::HTTP_OK);
          */
-
         $coin_id = $request->input("coin_id");
         $wallet_id = $request->input("wallet_id");
         $amount_usd = doubleval($request->input("amount_usd"));
         if(is_null($coin_id) || is_null($wallet_id)){
             throw new Exception('Empty parameters');
         }
-        if(!$this->buyService->checkIfIHaveThisCoin($coin_id, $wallet_id,$amount_usd)){
+
+        $value = $this->buyService->checkIfIHaveThisCoin($coin_id, $wallet_id, $amount_usd);
+        echo $value;
+
+        if(!$value){
             throw new Exception('Buy error');
         }
 
         return response()->setContent(Response::HTTP_OK);
-
     }
 }
 

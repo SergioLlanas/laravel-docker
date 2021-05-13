@@ -17,21 +17,33 @@ class ApiRoutesTest extends TestCase
     }
 
     /** @test */
-    public function getWalletCryptocurrencies(){
-        $response = $this->get('/api/wallet/1');
-        var_dump($response->getContent());
+    public function walletOpenTest(){
+        $response = $this->postJson('/api/wallet/open', ['user_id' => '1']);
         $response->assertStatus(200);
     }
 
     /** @test */
-    /*public function user(){
-        $response = $this->get('/api/user/1');
+    public function getWalletCryptocurrencies(){
+        $response = $this->get('/api/wallet/1');
         $response->assertStatus(200);
-    }*/
+    }
 
     /** @test */
-    /*public function walletOpenTest(){
-        $response = $this->get('/api/wallet/open');
+    public function getTotalBalanceOfAllMyCryptocurrencies(){
+        $response = $this->get('/api/wallet/1/balance');
         $response->assertStatus(200);
-    }*/
+    }
+
+    /** @test */
+    public function buyCoinWithUSD(){
+        $response = $this->postJson('/api/coin/buy');
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function sellCoin(){
+        $response = $this->postJson('/api/coin/sell');
+        $response->assertStatus(200);
+    }
+
 }

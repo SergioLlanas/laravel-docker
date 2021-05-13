@@ -10,40 +10,22 @@ use PhpParser\Node\Expr\Cast\Double;
 
 class SellCoinService{
 
+    private $coinDataSource;
 
     /**
      * SellCoinService constructor.
      */
-    public function __construct()
-    {
-
+    public function __construct(CoinDataSource $coinDataSource){
+        $this->coinDataSource = $coinDataSource;
     }
 
-    /**
-     * SellCoinService constructor.
-     * @param $coin_id
-     * @param Double $amount_coin
-     */
-    /*public function __construct(CoinDataSource $coin_id,Double $amount_coin)
-    {
-        $this->coin_id = $coin_id;
-        $this->amount_coin = $amount_coin;
-    }*/
-
-
-
-    public function getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell(float $amount_coin,String $coin_id,String $walletId){
-        $coinDAO = new CoinDataSource();
-        $amount_coinIHave = $coinDAO->getAmountCoinByIdAndWallet($coin_id,$walletId);
+    public function getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell(float $amount_coin,String $coin_id,String $wallet_id){
+        $amount_coinIHave = $this->coinDataSource->getAmountCoinByIdAndWallet($coin_id,$wallet_id);
         $difference = $amount_coinIHave - $amount_coin;
-
-        if($difference < 0){
-            return false;
-        }
-        return true;
+        return ($difference >=0);
     }
 
-    public function getUSDWhenISell($amount_coin,$coin_id): float{
+    public function getUSDWhenISell(float $amount_coin, String $coin_id): float{
         $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id) ;
         $obj = json_decode($json);
         $sellPrice = $obj[0]->price_usd;

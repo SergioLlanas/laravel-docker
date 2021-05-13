@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\..\Unit\Services;
+namespace Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GetCoinServiceTest extends TestCase
 {

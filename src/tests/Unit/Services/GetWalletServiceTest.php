@@ -3,14 +3,13 @@
 namespace Tests\Unit\Services;
 
 use App\DataSource\Database\CoinDataSource;
-use App\DataSource\Database\EloquentUserDataSource;
 use App\DataSource\Database\WalletDataSource;
+use App\Models\Coin;
 use App\Models\Wallet;
-use App\Services\EarlyAdopter\IsEarlyAdopterService;
 use App\Services\GetWalletService;
 use Illuminate\Database\Eloquent\Model;
 use Prophecy\Prophet;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GetWalletServiceTest extends TestCase{
 
@@ -29,45 +28,85 @@ class GetWalletServiceTest extends TestCase{
     /** @test */
     public function openNewWalletWithUserId(){
         $wallet_id = '1';
-        $user_id = '25';
+        $user_id = '2';
         $wallet = new Wallet();
-        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id]);
+        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 0.00]);
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
+        $this->walletDataSource->createNewWalletWithUserId($user_id)->shouldBeCalledOnce()->willReturn($wallet_id);
 
         $isWallet = $this->walletService->open($user_id);
-
-        //$this->assertEquals('1', $isWallet->wallet_id);
 
         $this->assertInstanceOf(Wallet::class, $isWallet);
     }
 
     /** @test */
-    /*public function getExistingWalletById(){
+    public function getExistingWalletById(){
         $wallet_id = '1';
+        $user_id = '1';
         $wallet = new Wallet();
-        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => '25']);
+        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
 
         $isWallet = $this->walletService->find($wallet_id);
 
         $this->assertInstanceOf(Wallet::class, $isWallet);
-    }*/
+    }
 
     /** @test */
-    /*public function getWalletWithOutUserId(){
+    public function getAllTheCoinsOfAWallet(){
         $wallet_id = '1';
+        $user_id = '1';
         $wallet = new Wallet();
-        $wallet->fill(['wallet_id' => '1', 'user_id' => '']);
+        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
+        $coin = new Coin();
+        $coin->fill(['id_transaction' => 1, 'coin_id' => '1', 'nameCoin' => 'Bitcoin',
+            'symbol' => 'BTC', 'wallet_id' => $wallet_id, 'amount_coins' => 10]);
 
-        $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn('Wallet not created');
+        $this->coinDataSource->getCoinsByWalletId($wallet_id)->shouldBeCalledOnce()->willReturn($coin);
+
+        $isCoin = $this->walletService->getWalletCoins($wallet_id);
+
+        $this->assertInstanceOf(Coin::class, $isCoin);
+    }
+
+    /** @test  */
+    public function noneCoinsCaugthInAWallet(){
+        $wallet_id = '1';
+        $user_id = '1';
+        $wallet = new Wallet();
+        $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
+
+        $this->coinDataSource->getCoinsByWalletId($wallet_id)->shouldBeCalledOnce()->willReturn('Coins not found');
+
+        $isCoin = $this->walletService->getWalletCoins($wallet_id);
+
+        $this->assertEquals('Coins not found', $isCoin);
+    }
+
+    /** @test */
+    public function noneWalletFoundById(){
+        $wallet_id = '';
+
+        $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn(new Wallet());
 
         $isWallet = $this->walletService->find($wallet_id);
 
-        $this->assertEquals('Wallet not created', $isWallet);
+        $this->assertEquals(new Wallet(), $isWallet);
+    }
 
-       // $this->assertInstanceOf(Wallet::class, $isWallet);
-    }*/
+    /** @test */
+    public function noWalletOpenWithUserId(){
+        $wallet_id = '1';
+        $user_id = '2';
+        $wallet = new Wallet();
 
+        $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
+        $this->walletDataSource->createNewWalletWithUserId($user_id)->shouldBeCalledOnce()->willReturn($wallet_id);
+
+        $isWallet = $this->walletService->open($user_id);
+
+        $this->assertEquals($wallet, $isWallet);
+    }
 }

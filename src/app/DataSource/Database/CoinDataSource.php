@@ -32,6 +32,14 @@ class CoinDataSource{
         return $coin->symbol;
     }
 
+    public function existsCoinIdAndWalletId(String $coin_id, String $wallet_id):bool{
+        $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
+        if(is_null($coin)){
+            throw new Exception('Coin not found');
+        }
+        return true;
+    }
+
     public function getAmountCoinByIdAndWallet(String $coin_id,String $wallet_id):Float{
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
         if(is_null($coin)){
@@ -75,6 +83,7 @@ class CoinDataSource{
         Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $walletId)->update(['amount_coins' => $coin->amount_coins + $amount_coin]);
 
         $updateCoin = Coin::query()->where('wallet_id', $walletId)->where('coin_id', $coin_id)->first();
+
         return ($updateCoin->amount_coins !== $coin->amount_coins);
 
 

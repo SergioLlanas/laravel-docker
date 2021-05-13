@@ -19,8 +19,18 @@ class BuyCoinService{
         $this->walletDataSource = $walletDataSource;
     }
 
-    public function checkIfIHaveThisCoin(String $coin_id, String $wallet_id, Float $amount_usd): bool{
+    public function check(String $coin_id, String $wallet_id, float $amount_usd):bool{
+        $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id);
+        $obj = json_decode($json);
+        $buyPrice = $obj[0]->price_usd;
+        $name = $obj[0]->name;
+        $symbol = $obj[0]->symbol;
 
+        $exist = $this->coinDataSource->existsCoinIdAndWalletId($coin_id, $wallet_id);
+
+    }
+
+    public function checkIfIHaveThisCoin(String $coin_id, String $wallet_id, Float $amount_usd): bool{
         try{
             $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id);
             $obj = json_decode($json);
@@ -31,13 +41,16 @@ class BuyCoinService{
             try{
                 $this->coinDataSource->getAmountCoinByIdAndWallet($coin_id, $wallet_id);
                 if($this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy($amount_usd,$wallet_id)){
-                    return $this->coinDataSource->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/$buyPrice,$wallet_id);
+                    $val = $this->coinDataSource->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/floatval($buyPrice),$wallet_id);
+                    if(is_null($val)){
+                        return false;
+                    }
                 }
             }catch (Exception $exception){
                 if($this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy($amount_usd,$wallet_id)){
-                    return $this->coinDataSource->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);                }
+                    return $this->coinDataSource->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);
+                }
             }
-
         }catch (Exception $exception){
             throw new Exception("Buy error");
         }
