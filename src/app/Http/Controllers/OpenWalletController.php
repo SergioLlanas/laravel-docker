@@ -41,7 +41,7 @@ class OpenWalletController extends BaseController {
             ], Response::HTTP_BAD_REQUEST);
         }
         return response()->json([
-            'wallet_id' => $wallet
+            'wallet_id' => $wallet->wallet_id
         ], Response::HTTP_OK);
     }
 }

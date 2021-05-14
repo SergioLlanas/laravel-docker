@@ -40,7 +40,7 @@ class CoinDataSource{
     }
 
     public function getCoinsByWalletId(String $wallet_id){
-        $coins = Coin::query()->where('wallet_id',$wallet_id);
+        $coins = Coin::query()->where('wallet_id',$wallet_id)->select('coin_id', 'nameCoin', 'symbol', 'amount_coins');
         if (is_null($coins)){
             throw new Exception('Coin not found');
         }

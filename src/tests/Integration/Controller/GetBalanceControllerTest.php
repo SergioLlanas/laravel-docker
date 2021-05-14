@@ -5,7 +5,6 @@ namespace Tests\Integration\Controller;
 use App\Models\Coin;
 use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -29,7 +28,7 @@ class GetBalanceControllerTest extends TestCase{
 
         $response = $this->get('api/wallet/1/balance');
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance_usd' => 8824.042]);
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance_usd' => 8403.926]);
     }
 
 }

@@ -10,18 +10,18 @@ class WalletDataSource{
     public function getWalletById(String $wallet_id): Wallet{
         $wallet = Wallet::query()->where('wallet_id', $wallet_id)->first();
         if (is_null($wallet) || $wallet->count() == 0) {
-            throw new Exception('Wallet not found');
+            throw new Exception('Wallet not found', 404);
         }
         return $wallet;
     }
 
-    public function getWalletWithMaxId():Wallet{
+    /*public function getWalletWithMaxId():Wallet{
         $wallet = Wallet::query()->orderBy('wallet_id', 'desc')->first();
         if(is_null($wallet) || $wallet->count() == 0){
             throw new Exception('Wallet not found');
         }
         return $wallet;
-    }
+    }*/
 
     public function createNewWalletWithUserId(String $user_id):String{
         if(is_null($user_id) || trim($user_id) === ''){
