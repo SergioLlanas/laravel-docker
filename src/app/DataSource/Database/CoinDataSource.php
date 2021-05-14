@@ -20,7 +20,7 @@ class CoinDataSource{
         if (is_null($coin) || $coin->count() == 0) {
             throw new Exception('Coin not found');
         }
-        return $coin->nameCoin;
+        return $coin->name;
     }
 
     public function getCoinSymbolById(String $coin_id): String{
@@ -36,11 +36,11 @@ class CoinDataSource{
         if(is_null($coin) || $coin->count() == 0){
             throw new Exception('Coin not found');
         }
-        return floatval($coin->amount_coins);
+        return floatval($coin->amount);
     }
 
     public function getCoinsByWalletId(String $wallet_id){
-        $coins = Coin::query()->where('wallet_id',$wallet_id)->select('coin_id', 'nameCoin', 'symbol', 'amount_coins');
+        $coins = Coin::query()->where('wallet_id',$wallet_id)->select('coin_id', 'name', 'symbol', 'amount', 'value_usd');
         if (is_null($coins)){
             throw new Exception('Coin not found');
         }
@@ -54,8 +54,9 @@ class CoinDataSource{
             throw new Exception('Transaction not done');
         }
         $coin = Coin::query()->insertGetId(array(
-            'coin_id' => $coin_id, 'nameCoin' => $name, 'symbol' => $symbol,
-            'wallet_id' => $wallet_id, 'amount_coins' => $amount_usd/$buy_price
+            'coin_id' => $coin_id, 'name' => $name, 'symbol' => $symbol,
+            'wallet_id' => $wallet_id, 'amount' => $amount_usd/$buy_price,
+            'value_usd' => $buy_price
         ));
         return $coin;
    }
@@ -69,8 +70,8 @@ class CoinDataSource{
         if(is_null($coin)){
             throw new Exception('Amount coin not updated');
         }
-        $before = $coin->amount_coins;
-        $coin->update(['amount_coins' => $coin->amount_coins + $amount_coin]);
+        $before = $coin->amount;
+        $coin->update(['amount' => $coin->amount + $amount_coin]);
 
         return ($coin->amount_coins !== $before);
     }
@@ -84,9 +85,9 @@ class CoinDataSource{
             throw new Exception('Amount coin not updated');
         }
 
-        $before = $coin->amount_coins;
-        $coin->update(['amount_coins' => $coin->amount_coins - $amount_coin]);
-        return ($coin->amount_coins !== $before);
+        $before = $coin->amount;
+        $coin->update(['amount' => $coin->amount - $amount_coin]);
+        return ($coin->amount !== $before);
     }
 
 }

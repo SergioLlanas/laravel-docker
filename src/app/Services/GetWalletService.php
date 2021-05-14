@@ -45,9 +45,10 @@ class GetWalletService{
         return $wallet;
     }
 
+    /* CUIDADO CON ESTO QUE DEPENDE DE LA FUNCION PETA O NO */
     public function getWalletCoins(String $wallet_id){
        $coins = $this->coinDataSource->getCoinsByWalletId($wallet_id);
-       if($coins == null || $coins->count() === 0){
+       if($coins == null || $coins->get()->count() ==0){
            throw new Exception('Coins not found');
        }
        return $coins;

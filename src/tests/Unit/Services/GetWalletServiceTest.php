@@ -60,8 +60,8 @@ class GetWalletServiceTest extends TestCase{
         $wallet = new Wallet();
         $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
         $coin = new Coin();
-        $coin->fill(['id_transaction' => 1, 'coin_id' => '1', 'nameCoin' => 'Bitcoin',
-            'symbol' => 'BTC', 'wallet_id' => $wallet_id, 'amount_coins' => 10]);
+        $coin->fill(['id_transaction' => 1, 'coin_id' => '1', 'name' => 'Bitcoin',
+            'symbol' => 'BTC', 'wallet_id' => $wallet_id, 'amount' => 10, 'value_usd' => 10]);
 
         $this->coinDataSource->getCoinsByWalletId($wallet_id)->shouldBeCalledOnce()->willReturn($coin);
 

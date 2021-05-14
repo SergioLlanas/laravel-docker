@@ -16,10 +16,11 @@ class CreateCoinsTable extends Migration
         Schema::create('coins', function (Blueprint $table) {
             $table->increments('id_transaction');
             $table->string('coin_id');
-            $table->string('nameCoin');
+            $table->string('name');
             $table->string('symbol');
             $table->string('wallet_id');
-            $table->float('amount_coins');
+            $table->float('amount');
+            $table->float('value_usd');
             $table->timestamps();
         });
     }

@@ -35,16 +35,6 @@ class WalletDataSourceTest extends TestCase{
     }
 
     /** @test */
-    public function getWalletWithMaxId(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        $wallet = $walletDataSource->getWalletWithMaxId();
-
-        $this->assertInstanceOf(Wallet::class, $wallet);
-    }
-
-    /** @test */
     public function createNewWalletWithUserId(){
         Wallet::factory(Wallet::class)->create();
         $walletDataSource = new WalletDataSource();

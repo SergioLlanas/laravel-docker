@@ -25,10 +25,11 @@ class CoinFactory extends Factory{
         return [
             'id_transaction' => 1,
             'coin_id' => '1',
-            'nameCoin' => 'Bitcoin',
+            'name' => 'Bitcoin',
             'symbol' => 'BIT',
             'wallet_id' => '1',
-            'amount_coins' => 25.4
+            'amount' => 25.4,
+            'value_usd' => 63.88
         ];
     }
 }
