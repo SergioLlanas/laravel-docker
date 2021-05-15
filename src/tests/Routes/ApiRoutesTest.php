@@ -2,13 +2,22 @@
 
 namespace Tests\Routes;
 
+use App\Models\Coin;
+use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ApiRoutesTest extends TestCase
-{
+class ApiRoutesTest extends TestCase{
+
     use RefreshDatabase;
+
+    protected function setUp():void{
+        parent::setUp();
+        Wallet::factory()->create(['wallet_id' => '1', 'user_id' => '25', 'transaction_balance' => 25.99]);
+        Wallet::factory()->create(['wallet_id' => '2', 'user_id' => '1', 'transaction_balance' => 13.85]);
+        Wallet::factory()->create(['wallet_id' => '3', 'user_id' => '5', 'transaction_balance' => 25.99]);
+        Coin::factory(Coin::class)->create();
+    }
 
     /** @test */
     public function getApiStatusTest(){
@@ -17,33 +26,103 @@ class ApiRoutesTest extends TestCase
     }
 
     /** @test */
-    public function walletOpenTest(){
+    public function buyCoinWithUSDWithSuccessResponse(){
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'1', 'wallet_id' => '1', 'amount_usd'=>10]);
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function buyCoinWithUSDWithBadRequestResponse(){
+        $response = $this->postJson('/api/coin/buy');
+        $response->assertStatus(400);
+        $response = $this->postJson('/api/coin/buy', []);
+        $response->assertStatus(400);
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'', 'wallet_id' => '1', 'amount_usd'=>0]);
+        $response->assertStatus(400);
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'1', 'wallet_id' => '', 'amount_usd'=>0]);
+        $response->assertStatus(400);
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'1', 'wallet_id' => '1', 'amount_usd'=>'']);
+        $response->assertStatus(400);
+    }
+
+    /** @test */
+    public function buyCoinWithUSDWithNotFoundResponse(){
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'5', 'wallet_id' => '1', 'amount_usd'=>0]);
+        $response->assertStatus(404);
+        $response = $this->postJson('/api/coin/buy', ['coin_id'=>'1', 'wallet_id' => '2', 'amount_usd'=>0]);
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function sellCoinWithSuccessResponse(){
+        $response = $this->postJson('/api/coin/sell', ['coin_id' => '1', 'wallet_id' => '1', 'amount_usd' => 0]);
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function sellCoinWithBadRequestResponse(){
+        $response = $this->postJson('/api/coin/sell');
+        $response->assertStatus(400);
+    }
+
+    /** @test */
+    public function sellCoinWithNotFoundResponse(){
+        $response = $this->postJson('/api/coin/sell', ['coin_id' => '', 'wallet_id' => '1', 'amount_usd' => 0]);
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function walletOpenWithSuccessResponse(){
         $response = $this->postJson('/api/wallet/open', ['user_id' => '1']);
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function getWalletCryptocurrencies(){
+    public function walletOpenWithBadRequestResponse(){
+        $response = $this->postJson('/api/wallet/open');
+        $response->assertStatus(400);
+    }
+
+    /** @test */
+    public function walletOpenWithNotFoundResponse(){
+        $response = $this->postJson('/api/wallet/open', ['user_id' => '6']);
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function getWalletCryptocurrenciesWithSuccessResponse(){
         $response = $this->get('/api/wallet/1');
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function getTotalBalanceOfAllMyCryptocurrencies(){
+    public function getWalletCryptocurrenciesWithBadRequestResponse(){
+        $response = $this->get('/api/wallet/ ');
+        $response->assertStatus(400);
+    }
+
+    /** @test */
+    public function getWalletCryptocurrenciesWithNotFoundResponse(){
+        $response = $this->get('/api/wallet/9');
+        $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function getTotalBalanceOfAllMyCryptocurrenciesWithSuccessResponse(){
         $response = $this->get('/api/wallet/1/balance');
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function buyCoinWithUSD(){
-        $response = $this->postJson('/api/coin/buy');
-        $response->assertStatus(200);
+    public function getTotalBalanceOfAllMyCryptocurrenciesWithBadRequestResponse(){
+        $response = $this->get('/api/wallet/ /balance');
+        $response->assertStatus(400);
     }
 
     /** @test */
-    public function sellCoin(){
-        $response = $this->postJson('/api/coin/sell');
-        $response->assertStatus(200);
+    public function getTotalBalanceOfAllMyCryptocurrenciesWithNotFoundResponse(){
+        $response = $this->get('/api/wallet/9/balance');
+        $response->assertStatus(404);
     }
 
 }

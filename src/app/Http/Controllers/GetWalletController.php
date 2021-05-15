@@ -7,6 +7,7 @@ use App\Services\GetWalletService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+use function PHPUnit\Framework\isEmpty;
 
 class GetWalletController extends BaseController{
 
@@ -20,22 +21,18 @@ class GetWalletController extends BaseController{
     }
 
     public function __invoke(String $wallet_id): JsonResponse{
-        //Comprobamos si existe o no la cartera. Si no existe se lanza una excepción
+        if(is_null($wallet_id) || isEmpty($wallet_id) || trim($wallet_id) == ''){
+            return response()->json([
+                'error' => 'Coins not found'
+            ], Response::HTTP_BAD_REQUEST);
+        }
         try{
             $this->walletService->find($wallet_id);
-        }catch(Exception $exception){
-            return response()->json([
-                'error' => $exception->getMessage()
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        //Luego se buscan las coins. Si no hay coins se lanza una excepción
-        try{
             $walletCoins = $this->walletService->getWalletCoins($wallet_id);
         } catch (Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_NOT_FOUND);
         }
         return response()->json([
             'wallet-data' => $walletCoins->get(),

@@ -38,6 +38,16 @@ Route::get(
     GetUserController::class
 );
 
+Route::post(
+    '/coin/buy',
+    BuyCoinController::class
+);
+
+Route::post(
+    '/coin/sell',
+    SellCoinController::class
+);
+
 Route::get(
     '/wallet/{idWallet}',
     GetWalletController::class
@@ -53,13 +63,4 @@ Route::post(
     OpenWalletController::class
 );
 
-Route::post(
-    '/coin/buy',
-    BuyCoinController::class
-);
-
-Route::post(
-    '/coin/sell',
-    SellCoinController::class
-);
 

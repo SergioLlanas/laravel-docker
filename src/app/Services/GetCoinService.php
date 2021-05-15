@@ -1,35 +1,26 @@
 <?php
 
-
 namespace App\Services;
 
-
 use App\DataSource\Database\CoinDataSource;
+use Exception;
 
 class GetCoinService{
 
-    private $coinDAO;
+    private $coinDataSource;
 
     /**
      * GetCoinService constructor.
      */
-    public function __construct(CoinDataSource $coinDAO){
-        $this->coinDAO = $coinDAO;
+    public function __construct(CoinDataSource $coinDataSource){
+        $this->coinDataSource = $coinDataSource;
     }
 
     public function getCoinName(String $coinId):String{
-        $coinName = $this->coinDAO->getCoinNameById($coinId);
+        $coinName = $this->coinDataSource->getCoinNameById($coinId);
         if($coinName == null){
-            throw new \Exception('Coin not found');
+            throw new Exception('Coin not found', 404);
         }
         return $coinName;
     }
-
-    /*public function getCoinSymbol(String $coinId):String{
-        $coinSymb = $this->coinDAO->getCoinSymbolById($coinId);
-        if($coinSymb == null){
-            throw new \Exception('Coin not found');
-        }
-        return $coinSymb;
-    }*/
 }

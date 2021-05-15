@@ -61,8 +61,8 @@ class CoinDataSource{
         return $coin;
    }
 
-    public function incrementAmountCoinByIdAndWallet(String $coin_id, float $amount_coin, String $walletId): bool{
-        if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
+    public function incrementAmountCoinByIdAndWallet(String $coin_id, float $amount_coin, String $walletId){
+        if(trim($coin_id) === '' || trim($walletId) === '' || $amount_coin <= 0){
             throw new Exception('Amount coin not updated');
         }
 
@@ -73,7 +73,7 @@ class CoinDataSource{
         $before = $coin->amount;
         $coin->update(['amount' => $coin->amount + $amount_coin]);
 
-        return ($coin->amount_coins !== $before);
+        return ($coin->amount != $before);
     }
 
     public function decrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId):bool{
@@ -88,6 +88,20 @@ class CoinDataSource{
         $before = $coin->amount;
         $coin->update(['amount' => $coin->amount - $amount_coin]);
         return ($coin->amount !== $before);
+    }
+
+    public function makeTransaction(string $buyPrice, string $name,string $symbol, string $coin_id, string $wallet_id, float $amount_usd){
+        /* Comprobamos si existe la coin en la cartera */
+        $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
+
+        /* Hacer la transacción */
+        if($coin->get()->count() == 0){
+            /* No existe */
+            return $this->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);
+        }else{
+            /* Existe */
+            return $this->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/floatval($buyPrice),$wallet_id);
+        }
     }
 
 }

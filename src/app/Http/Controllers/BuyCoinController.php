@@ -20,40 +20,31 @@ class BuyCoinController extends BaseController{
         $this->buyService = $buyService;
     }
 
-    public function __invoke(Request $request):Response{
-        /*
-         * try{
-            $userId = $request->input("user_id");
-            if(is_null($userId)){
+    public function __invoke(Request $request):JsonResponse{
+        try{
+            $coin_id = $request->input("coin_id");
+            $wallet_id = $request->input("wallet_id");
+            $amount_usd = $request->input("amount_usd");
+            if(is_null($coin_id) || is_null($wallet_id) || is_null($amount_usd)){
                 return response()->json([
-                    'error' => 'User not found'
+                    'error' =>'Empty parameters'
                 ], Response::HTTP_BAD_REQUEST);
             }
-            $wallet = $this->getWalletService->open($userId);
+            if(!$this->buyService->checkIfIHaveThisCoin($coin_id, $wallet_id, $amount_usd)){
+                return response()->json([
+                   'error' => 'errorsito'
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }catch(Exception $exception){
+            echo $exception->getMessage();
             return response()->json([
                 'error' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_NOT_FOUND);
         }
         return response()->json([
-            'wallet_id' => $wallet
+            'success' => 'You have bought some coins correctly'
         ], Response::HTTP_OK);
-         */
-        $coin_id = $request->input("coin_id");
-        $wallet_id = $request->input("wallet_id");
-        $amount_usd = doubleval($request->input("amount_usd"));
-        if(is_null($coin_id) || is_null($wallet_id)){
-            throw new Exception('Empty parameters');
-        }
 
-        $value = $this->buyService->checkIfIHaveThisCoin($coin_id, $wallet_id, $amount_usd);
-        echo $value;
-
-        if(!$value){
-            throw new Exception('Buy error');
-        }
-
-        return response()->setContent(Response::HTTP_OK);
     }
 }
 

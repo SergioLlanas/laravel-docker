@@ -27,7 +27,6 @@ class GetWalletService{
     }
 
     public function open(String $user_id):Wallet{
-        /* Crearlo y que directamente me devuelva el id */
         try{
             $walletId = $this->walletDataSource->createNewWalletWithUserId($user_id);
             $wallet = $this->walletDataSource->getWalletById($walletId);
@@ -39,8 +38,8 @@ class GetWalletService{
 
     public function find(String $wallet_id):Wallet{
         $wallet = $this->walletDataSource->getWalletById($wallet_id);
-        if($wallet == null){
-            throw new \Exception('Wallet not found');
+        if($wallet == null || $wallet->getAttributes() == "[]"){
+            throw new Exception('Wallet not found');
         }
         return $wallet;
     }
