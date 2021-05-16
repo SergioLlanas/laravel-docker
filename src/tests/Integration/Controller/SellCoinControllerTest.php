@@ -34,7 +34,7 @@ class SellCoinControllerTest extends TestCase
     }
 
     /** @test */
-    public function tryToBuyCoinsWithOutWalletId(){
+    public function tryToSellCoinsWithOutWalletId(){
         $response1 = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '', 'amount_usd'=>10]);
         $response2 = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '  ', 'amount_usd'=>10]);
 
@@ -43,20 +43,20 @@ class SellCoinControllerTest extends TestCase
     }
 
     /** @test */
-    public function tryToBuyCoinsWithOutAmount(){
+    public function tryToSellCoinsWithOutAmount(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '1', 'amount_usd'=>'']);
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
     }
 
     /** @test */
-    public function tryToBuyCoinsForBadWalletId(){
+    public function tryToSellCoinsForBadWalletId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '2', 'amount_usd'=>10]);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
     }
 
     /** @test */
-    public function tryToBuyCoinsForBadCoinId(){
+    public function tryToSellCoinsForBadCoinId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => 'a', 'wallet_id' => '2', 'amount_usd'=>10]);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
