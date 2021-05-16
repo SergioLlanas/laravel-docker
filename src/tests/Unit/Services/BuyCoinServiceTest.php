@@ -38,7 +38,7 @@ class BuyCoinServiceTest extends TestCase{
             'symbol' => 'BTC', 'wallet_id' => '1', 'amount' => 10, 'value_usd' => 562]);
 
         $this->walletDataSource->getWalletById('1')->shouldBeCalledOnce()->willReturn($wallet);
-        $this->coinDataSource->makeTransaction(49492.58, 'Bitcoin', 'BTC', '90', '1', 10)->shouldBeCalledOnce()->willReturn(true);
+        $this->coinDataSource->makeBuyTransaction(49293.87, 'Bitcoin', 'BTC', '90', '1', 10)->shouldBeCalledOnce()->willReturn(true);
         $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(10,'1')->shouldBeCalledOnce()->willReturn(true);
 
         $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('90', '1', 10);
@@ -54,7 +54,7 @@ class BuyCoinServiceTest extends TestCase{
             'symbol' => 'BTC', 'wallet_id' => '1', 'amount' => 10, 'value_usd' => 562]);
 
         $this->walletDataSource->getWalletById('1')->shouldBeCalledOnce()->willReturn($wallet);
-        $this->coinDataSource->makeTransaction(3916.66, 'Ethereum', 'ETH', '80', '1', 10)->shouldBeCalledOnce()->willReturn(true);
+        $this->coinDataSource->makeBuyTransaction(3803.25, 'Ethereum', 'ETH', '80', '1', 10)->shouldBeCalledOnce()->willReturn(true);
         $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(10,'1')->shouldBeCalledOnce()->willReturn(true);
 
         $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('80', '1', 10);
@@ -70,7 +70,7 @@ class BuyCoinServiceTest extends TestCase{
             'symbol' => 'BTC', 'wallet_id' => '1', 'amount' => 10, 'value_usd' => 562]);
 
         $this->walletDataSource->getWalletById('2')->shouldBeCalledOnce()->willReturn(new Wallet());
-        $this->coinDataSource->makeTransaction(3916.66, 'Ethereum', 'ETH', '80', '2', 10)->shouldNotHaveBeenCalled()->willReturn(true);
+        $this->coinDataSource->makeBuyTransaction(3802.64, 'Ethereum', 'ETH', '80', '2', 10)->shouldNotHaveBeenCalled()->willReturn(true);
         $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(10,'2')->shouldNotHaveBeenCalled()->willReturn(false);
 
         $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('80', '2', 10);

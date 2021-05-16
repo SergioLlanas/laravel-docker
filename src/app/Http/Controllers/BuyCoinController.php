@@ -25,18 +25,17 @@ class BuyCoinController extends BaseController{
             $coin_id = $request->input("coin_id");
             $wallet_id = $request->input("wallet_id");
             $amount_usd = $request->input("amount_usd");
-            if(is_null($coin_id) || is_null($wallet_id) || is_null($amount_usd)){
+            if(trim($coin_id) == '' || trim($wallet_id) == '' || trim($amount_usd) == ''){
                 return response()->json([
-                    'error' =>'Empty parameters'
+                    'error' =>'Coin and wallet not found'
                 ], Response::HTTP_BAD_REQUEST);
             }
             if(!$this->buyService->checkIfIHaveThisCoin($coin_id, $wallet_id, $amount_usd)){
                 return response()->json([
-                   'error' => 'errorsito'
-                ], Response::HTTP_BAD_REQUEST);
+                   'error' => 'Coin not found'
+                ], Response::HTTP_NOT_FOUND);
             }
         }catch(Exception $exception){
-            echo $exception->getMessage();
             return response()->json([
                 'error' => $exception->getMessage()
             ], Response::HTTP_NOT_FOUND);
