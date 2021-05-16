@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\DataSource\Database\CoinDataSource;
 use App\DataSource\Database\WalletDataSource;
-use Mockery\Exception;
+use Doctrine\DBAL\Exception;
 use PhpParser\Node\Expr\Cast\Double;
 
 class SellCoinService{
@@ -35,9 +35,8 @@ class SellCoinService{
         }catch(Exception $exception){
             throw new Exception($exception->getMessage());
         }
-        return false;
+        return true;
     }
-
 
     public function getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell(float $amount_coin,String $coin_id,String $wallet_id){
         $amount_coinIHave = $this->coinDataSource->getAmountCoinByIdAndWallet($coin_id,$wallet_id);

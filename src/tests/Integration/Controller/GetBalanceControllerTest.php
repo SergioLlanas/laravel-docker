@@ -28,7 +28,7 @@ class GetBalanceControllerTest extends TestCase{
 
         $response = $this->get('api/wallet/1/balance');
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance_usd' => 8403.926]);
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance_usd' => 25.99]);
     }
 
 }

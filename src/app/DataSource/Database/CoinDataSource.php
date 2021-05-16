@@ -104,4 +104,20 @@ class CoinDataSource{
         }
     }
 
+   /* public function makeSellTransaction(float $amount, String $coin_id, String $wallet_id){
+
+        try {
+            if ($this->getAmountCoinByIdAndWallet() > $amount) {
+                try {
+                    return $this->decrementAmountCoinByIdAndWallet($coin_id, $amount, $wallet_id);
+                } catch (Exception $e) {
+                    throw new Exception($e->getMessage());
+                }
+            }
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return true;
+    }*/
+
 }

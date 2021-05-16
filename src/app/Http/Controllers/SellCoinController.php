@@ -49,6 +49,10 @@ class SellCoinController extends BaseController{
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        return response()->json([
+            'success' => 'You have sold some coins correctly'
+        ], Response::HTTP_OK);
+
 
         /*$walletDAO = new WalletDataSource();
         $coinDAO = new CoinDataSource();

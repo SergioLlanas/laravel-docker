@@ -35,20 +35,13 @@ class SellCoinServiceTest extends TestCase{
         $coin->fill(['id_transaction' => '1', 'coin_id' => '90', 'name' => 'Bitcoin',
             'symbol' => 'BTC', 'wallet_id' => '1', 'amount' => 10, 'value_usd' => 562]);
 
-        $this->coinDataSource->decrementAmountCoinByIdAndWallet('90', 3, '1')->shouldBeCalledOnce()->willReturn(10);
+        $this->coinDataSource->decrementAmountCoinByIdAndWallet('90', 3, '1')->shouldBeCalledOnce()->willReturn(true);
         $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(3, '1')->shouldBeCalledOnce()->willReturn(true);
 
         $sellCoinService = $this->sellCoinService->makeSellFunction(3, '90', '1');
 
         $this->assertTrue($sellCoinService);
-        /*
 
-        $this->walletDataSource->getWalletById('1')->shouldBeCalledOnce()->willReturn($wallet);
-        $this->coinDataSource->makeTransaction(49492.58, 'Bitcoin', 'BTC', '90', '1', 10)->shouldBeCalledOnce()->willReturn(true);
-        $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(10,'1')->shouldBeCalledOnce()->willReturn(true);
-
-        $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('90', '1', 10);
-        $this->assertTrue($buyCoinService);*/
     }
 
     /** @test */
