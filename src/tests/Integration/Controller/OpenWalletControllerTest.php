@@ -7,23 +7,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class OpenWalletControllerTest extends TestCase
-{
+class OpenWalletControllerTest extends TestCase{
+
     use RefreshDatabase;
+
+    protected function setUp():void{
+        parent::setUp();
+        Wallet::factory(Wallet::class)->create();
+    }
 
     /** @test  */
     public function openWalletForValidUserId(){
-        Wallet::factory(Wallet::class)->create();
-
         $response = $this->postJson('/api/wallet/open', ['user_id' => '1']);
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['wallet_id' => '2']);
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['wallet' => ["created_at"=>null,"transaction_balance"=>"0.0","updated_at"=>null,"user_id"=>"1","wallet_id"=>"2"]]);
     }
 
     /** @test */
     public function walletNotOpenForNullUser(){
-        Wallet::factory(Wallet::class)->create();
-
         $response = $this->postJson('/api/wallet/open');
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error'=>'User not found']);
@@ -31,13 +32,8 @@ class OpenWalletControllerTest extends TestCase
 
     /** @test */
     public function walletNotOpenForEmptyUser(){
-        Wallet::factory(Wallet::class)->create();
-
         $response = $this->postJson('/api/wallet/open', ['user_id' => '']);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error'=>'User not found']);
     }
-
-
-
 }

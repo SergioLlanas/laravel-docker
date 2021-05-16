@@ -26,12 +26,12 @@ class BuyCoinService{
             /* Comprobamos si existe la cartera, si no existe no se puede hacer la transacción */
             $wallet = $this->walletDataSource->getWalletById($wallet_id);
             if(!is_null($wallet->wallet_id)){
-                if($this->coinDataSource->makeTransaction($buyPrice, $name, $symbol,$coin_id, $wallet_id, $amount_usd)){
+                if($this->coinDataSource->makeBuyTransaction($buyPrice, $name, $symbol,$coin_id, $wallet_id, $amount_usd)){
                     return $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy($amount_usd, $wallet_id);
                 }
             }
         }catch (Exception $exception){
-            throw new Exception('Error buying coins');
+            throw new Exception($exception->getMessage());
         }
         return false;
     }

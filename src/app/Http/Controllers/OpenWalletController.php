@@ -35,13 +35,18 @@ class OpenWalletController extends BaseController {
                 ], Response::HTTP_BAD_REQUEST);
             }
             $wallet = $this->getWalletService->open($userId);
+            if(is_null($wallet)){
+                return response()->json([
+                    'error' => 'Wallet not found'
+                ], Response::HTTP_NOT_FOUND);
+            }
         }catch(Exception $exception){
             return response()->json([
                 'error' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_NOT_FOUND);
         }
         return response()->json([
-            'wallet_id' => $wallet->wallet_id
+            'wallet' => $wallet
         ], Response::HTTP_OK);
     }
 }

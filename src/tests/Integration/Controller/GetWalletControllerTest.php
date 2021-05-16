@@ -28,10 +28,17 @@ class GetWalletControllerTest extends TestCase{
     }
 
     /** @test */
-    public function getWalletWithOutCoins(){
+    public function walletFoundWithOutCoinsForGivenId(){
         $response = $this->get('/api/wallet/2');
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coins not found']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertExactJson(['error' => 'Coin not found']);
+    }
+
+    /** @test */
+    public function noWalletFoundBadRequestResponse(){
+        $response = $this->get('/api/wallet/ ');
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Wallet not found']);
     }
 
     /** @test */

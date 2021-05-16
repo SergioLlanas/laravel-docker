@@ -76,11 +76,6 @@ class BuyCoinServiceTest extends TestCase{
         $buyCoinService = $this->buyCoinService->checkIfIHaveThisCoin('80', '2', 10);
         $this->assertFalse($buyCoinService);
     }
-
-    /* cuando da error en algun lado */
-
-
-
 }
 
 

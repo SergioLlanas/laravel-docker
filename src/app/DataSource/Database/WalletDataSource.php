@@ -10,7 +10,7 @@ class WalletDataSource{
     public function getWalletById(String $wallet_id): Wallet{
         $wallet = Wallet::query()->where('wallet_id', $wallet_id)->first();
         if (is_null($wallet) || $wallet->count() == 0) {
-            throw new Exception('Wallet not found', 404);
+            throw new Exception('Wallet not found');
         }
         return $wallet;
     }
@@ -27,8 +27,11 @@ class WalletDataSource{
         if(is_null($user_id) || trim($user_id) === ''){
             throw new Exception('Wallet not created');
         }
-        $wallet = Wallet::query()->insertGetId(array('user_id' => $user_id,'transaction_balance' => 0.00));
-        return $wallet;
+        $wallet_id = Wallet::query()->insertGetId(array('user_id' => $user_id,'transaction_balance' => 0.00));
+        if(is_null($wallet_id)){
+            throw new Exception('Wallet not created');
+        }
+        return $wallet_id;
     }
 
     public function updateTransactionBalanceOfWalletIdWhenIBuy(float $amount_usd, String $wallet_id): bool{

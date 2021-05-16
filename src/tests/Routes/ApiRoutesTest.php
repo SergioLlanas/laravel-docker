@@ -84,10 +84,10 @@ class ApiRoutesTest extends TestCase{
     }
 
     /** @test */
-    public function walletOpenWithNotFoundResponse(){
-        $response = $this->postJson('/api/wallet/open', ['user_id' => '6']);
+    /*public function walletOpenWithNotFoundResponse(){
+        $response = $this->postJson('/api/wallet/open', ['user_id' => '1']);
         $response->assertStatus(404);
-    }
+    }*/
 
     /** @test */
     public function getWalletCryptocurrenciesWithSuccessResponse(){

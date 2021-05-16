@@ -21,14 +21,19 @@ class GetWalletController extends BaseController{
     }
 
     public function __invoke(String $wallet_id): JsonResponse{
-        if(is_null($wallet_id) || isEmpty($wallet_id) || trim($wallet_id) == ''){
+        if(trim($wallet_id) == ''){
             return response()->json([
-                'error' => 'Coins not found'
+                'error' => 'Wallet not found'
             ], Response::HTTP_BAD_REQUEST);
         }
         try{
-            $this->walletService->find($wallet_id);
+            $wallet = $this->walletService->find($wallet_id);
             $walletCoins = $this->walletService->getWalletCoins($wallet_id);
+            if($walletCoins->count() <= 0){
+                return response()->json([
+                    'error' => 'Coin not found'
+                ], Response::HTTP_NOT_FOUND);
+            }
         } catch (Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()

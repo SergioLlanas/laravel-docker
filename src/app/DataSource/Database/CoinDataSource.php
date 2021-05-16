@@ -31,12 +31,12 @@ class CoinDataSource{
         return $coin->symbol;
     }
 
-    public function getAmountCoinByIdAndWallet(String $coin_id,String $wallet_id):Float{
+    public function getAmountCoinByIdAndWallet(String $coin_id,String $wallet_id){
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
         if(is_null($coin) || $coin->count() == 0){
             throw new Exception('Coin not found');
         }
-        return floatval($coin->amount);
+        return $coin->amount;
     }
 
     public function getCoinsByWalletId(String $wallet_id){
@@ -47,7 +47,7 @@ class CoinDataSource{
         return $coins;
     }
 
-    public function doNewTransaction(String $coin_id, String $wallet_id, int $amount_usd,String $name, String $symbol,float $buy_price):String{
+    public function doNewTransaction(String $coin_id, String $wallet_id, float $amount_usd,String $name, String $symbol,float $buy_price):String{
 
         if(is_null($coin_id) || trim($coin_id) === '' || is_null($wallet_id) || trim($wallet_id) === '' ||is_null($name) || trim($name) === ''
         || is_null($symbol) || trim($symbol) === '' || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
@@ -76,7 +76,7 @@ class CoinDataSource{
         return ($coin->amount != $before);
     }
 
-    public function decrementAmountCoinByIdAndWallet(String $coin_id,String $amount_coin, String $walletId):bool{
+    public function decrementAmountCoinByIdAndWallet(String $coin_id,float $amount_coin, String $walletId):bool{
         if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
             throw new Exception('Amount coin not updated');
         }
@@ -90,7 +90,7 @@ class CoinDataSource{
         return ($coin->amount !== $before);
     }
 
-    public function makeTransaction(string $buyPrice, string $name,string $symbol, string $coin_id, string $wallet_id, float $amount_usd){
+    public function makeBuyTransaction(float $buyPrice, String $name,String $symbol, String $coin_id, String $wallet_id, float $amount_usd){
         /* Comprobamos si existe la coin en la cartera */
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
 
