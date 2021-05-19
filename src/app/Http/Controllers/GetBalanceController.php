@@ -25,6 +25,12 @@ class GetBalanceController extends BaseController {
         $amountUsdCoinsIHave = 0;
         $totalBalance = 0;
         try{
+            if(is_null($idWallet) || trim($idWallet) == ''){
+                return response()->json([
+                    'error' => 'Wallet not found'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $walletCoins = $this->walletService->getWalletCoins($idWallet)->get();
             for($i = 0; $i < $walletCoins->count(); $i++){
                 $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$walletCoins[0]->coin_id);
@@ -49,7 +55,7 @@ class GetBalanceController extends BaseController {
         } catch (Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
+            ], Response::HTTP_NOT_FOUND);
         }
 
         return response()->json([

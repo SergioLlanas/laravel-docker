@@ -26,7 +26,6 @@ class BuyCoinService{
             $buyPrice = $obj[0]->price_usd;
             $name = $obj[0]->name;
             $symbol = $obj[0]->symbol;
-            /* Comprobamos si existe la cartera, si no existe no se puede hacer la transacción */
             $wallet = $this->walletDataSource->getWalletById($wallet_id);
             if(!is_null($wallet->wallet_id)){
                 if($this->coinDataSource->makeBuyTransaction($buyPrice, $name, $symbol,$coin_id, $wallet_id, $amount_usd)){

@@ -39,6 +39,8 @@ class CoinDataSource{
         return $coin->amount;
     }
 
+    //Si antes hemos comprobado que el wallet existe nada, si no lo hemos comprobado devolver tambien
+    //una excepcion por si lo k no existe es el wallet
     public function getCoinsByWalletId(String $wallet_id){
         $coins = Coin::query()->where('wallet_id',$wallet_id)->select('coin_id', 'name', 'symbol', 'amount', 'value_usd');
         if (is_null($coins)){
@@ -47,8 +49,8 @@ class CoinDataSource{
         return $coins;
     }
 
+    //Error por si no se ha insertado bien el coin ($coin is null)
     public function doNewTransaction(String $coin_id, String $wallet_id, float $amount_usd,String $name, String $symbol,float $buy_price):String{
-
         if(is_null($coin_id) || trim($coin_id) === '' || is_null($wallet_id) || trim($wallet_id) === '' ||is_null($name) || trim($name) === ''
         || is_null($symbol) || trim($symbol) === '' || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
             throw new Exception('Transaction not done');
@@ -103,21 +105,4 @@ class CoinDataSource{
             return $this->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/floatval($buyPrice),$wallet_id);
         }
     }
-
-   /* public function makeSellTransaction(float $amount, String $coin_id, String $wallet_id){
-
-        try {
-            if ($this->getAmountCoinByIdAndWallet() > $amount) {
-                try {
-                    return $this->decrementAmountCoinByIdAndWallet($coin_id, $amount, $wallet_id);
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
-            }
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-        return true;
-    }*/
-
 }

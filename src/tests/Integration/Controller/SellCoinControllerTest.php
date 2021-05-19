@@ -9,8 +9,10 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class SellCoinControllerTest extends TestCase
-{
+class SellCoinControllerTest extends TestCase{
+
+    use RefreshDatabase;
+
     protected function setUp():void{
         parent::setUp();
         Coin::factory(Coin::class)->create();
@@ -52,13 +54,13 @@ class SellCoinControllerTest extends TestCase
     public function tryToSellCoinsForBadWalletId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '2', 'amount_usd'=>10]);
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coin not found']);
     }
 
     /** @test */
     public function tryToSellCoinsForBadCoinId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => 'a', 'wallet_id' => '2', 'amount_usd'=>10]);
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coin not found']);
     }
 }

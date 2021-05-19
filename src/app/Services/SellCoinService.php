@@ -25,7 +25,7 @@ class SellCoinService{
     public function makeSellFunction(float $amount, String $coin_id, String $wallet_id){
         try{
             $amountCoin = $this->coinDataSource->getAmountCoinByIdAndWallet($coin_id, $wallet_id);
-            var_dump($amountCoin);
+            $amountCoin = floatval($amountCoin);
             $difference = $amountCoin - $amount;
             if($difference > 0){
                 if($this->coinDataSource->decrementAmountCoinByIdAndWallet($coin_id, $amount, $wallet_id)){
@@ -35,10 +35,10 @@ class SellCoinService{
         }catch(Exception $exception){
             throw new Exception($exception->getMessage());
         }
-        return true;
+        return false;
     }
 
-    public function getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell(float $amount_coin,String $coin_id,String $wallet_id){
+    /*public function getDiferenceBetweenAmountCoinThatIHaveAndAmounCoinIWantToSell(float $amount_coin,String $coin_id,String $wallet_id){
         $amount_coinIHave = $this->coinDataSource->getAmountCoinByIdAndWallet($coin_id,$wallet_id);
         $difference = $amount_coinIHave - $amount_coin;
         return ($difference >=0);
@@ -49,6 +49,6 @@ class SellCoinService{
         $obj = json_decode($json);
         $sellPrice = $obj[0]->price_usd;
         return $amount_coin * $sellPrice;
-    }
+    }*/
 
 }

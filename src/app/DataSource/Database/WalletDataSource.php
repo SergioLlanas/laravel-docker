@@ -15,14 +15,6 @@ class WalletDataSource{
         return $wallet;
     }
 
-    /*public function getWalletWithMaxId():Wallet{
-        $wallet = Wallet::query()->orderBy('wallet_id', 'desc')->first();
-        if(is_null($wallet) || $wallet->count() == 0){
-            throw new Exception('Wallet not found');
-        }
-        return $wallet;
-    }*/
-
     public function createNewWalletWithUserId(String $user_id):String{
         if(is_null($user_id) || trim($user_id) === ''){
             throw new Exception('Wallet not created');
@@ -50,6 +42,7 @@ class WalletDataSource{
         }
         $wallet = Wallet::query()->where('wallet_id', $wallet_id)->first();
         $before = $wallet->transaction_balance;
+        $before = floatval($before);
         $wallet->update(['transaction_balance' => $wallet->transaction_balance + $amount_usd]);
 
         return ($wallet->transaction_balance !== $before);
