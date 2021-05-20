@@ -54,13 +54,13 @@ class SellCoinControllerTest extends TestCase{
     public function tryToSellCoinsForBadWalletId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '2', 'amount_usd'=>10]);
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coin not found']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertExactJson(['error' => 'Coin not found']);
     }
 
     /** @test */
     public function tryToSellCoinsForBadCoinId(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => 'a', 'wallet_id' => '2', 'amount_usd'=>10]);
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coin not found']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertExactJson(['error' => 'Coin not found']);
     }
 }

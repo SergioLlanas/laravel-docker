@@ -39,7 +39,7 @@ class GetWalletService{
     public function find(String $wallet_id):Wallet{
         $wallet = $this->walletDataSource->getWalletById($wallet_id);
         if($wallet == null || $wallet->getAttributes() == "[]"){
-            throw new Exception('Wallet not found');
+            throw new Exception('Wallet with specific Id not found');
         }
         return $wallet;
     }

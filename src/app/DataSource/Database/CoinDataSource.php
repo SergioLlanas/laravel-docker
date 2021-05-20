@@ -64,13 +64,21 @@ class CoinDataSource{
    }
 
     public function incrementAmountCoinByIdAndWallet(String $coin_id, float $amount_coin, String $walletId){
-        if(trim($coin_id) === '' || trim($walletId) === '' || $amount_coin <= 0){
+        /*if(trim($coin_id) === '' || trim($walletId) === '' || $amount_coin <= 0){
             throw new Exception('Amount coin not updated');
+        }*/
+
+        if(trim($coin_id === '')){
+            throw new Exception('Empty Coin Field');
+        }elseif (trim($walletId) === ''){
+            throw new Exception('Empty Wallet Field');
+        }elseif ($amount_coin <=0){
+            throw new Exception('Can´t buy negative number');
         }
 
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $walletId)->first();
         if(is_null($coin)){
-            throw new Exception('Amount coin not updated');
+            throw new Exception('Coin with specified Id was not found');
         }
         $before = $coin->amount;
         $coin->update(['amount' => $coin->amount + $amount_coin]);
@@ -79,12 +87,20 @@ class CoinDataSource{
     }
 
     public function decrementAmountCoinByIdAndWallet(String $coin_id,float $amount_coin, String $walletId):bool{
-        if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
+        /*if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
             throw new Exception('Amount coin not updated');
+        }*/
+        if(trim($coin_id === '')){
+            throw new Exception('Empty Coin Field');
+        }elseif (trim($walletId) === ''){
+            throw new Exception('Empty Wallet Field');
+        }elseif ($amount_coin <=0){
+            throw new Exception('Can´t buy negative number');
         }
+
         $coin = Coin::query()->where('wallet_id', $walletId)->where('coin_id', $coin_id)->first();
         if(is_null($coin)){
-            throw new Exception('Amount coin not updated');
+            throw new Exception('Coin with specified Id was not found');
         }
 
         $before = $coin->amount;

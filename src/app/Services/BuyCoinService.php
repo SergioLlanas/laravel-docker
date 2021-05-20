@@ -21,7 +21,7 @@ class BuyCoinService{
             $json =file_get_contents("https://api.coinlore.net/api/ticker/?id=".$coin_id);
             $obj = json_decode($json);
             if(is_null($obj)){
-                throw new Exception('Coin not found');
+                throw new Exception('Coin with specific Id not found');
             }
             $buyPrice = $obj[0]->price_usd;
             $name = $obj[0]->name;

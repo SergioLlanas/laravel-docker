@@ -18,7 +18,7 @@ class GetBalanceControllerTest extends TestCase{
 
         $response = $this->get('api/wallet/2/balance');
 
-        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Wallet not found']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertExactJson(['error' => 'Wallet not found']);
     }
 
     /** @test */
