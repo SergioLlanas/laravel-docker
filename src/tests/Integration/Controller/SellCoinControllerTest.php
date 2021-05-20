@@ -47,6 +47,7 @@ class SellCoinControllerTest extends TestCase{
     /** @test */
     public function tryToSellCoinsWithOutAmount(){
         $response = $this->postJson('/api/coin/sell',['coin_id' => '1', 'wallet_id' => '1', 'amount_usd'=>'']);
+
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Sell not done']);
     }
 

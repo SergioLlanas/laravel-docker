@@ -11,24 +11,25 @@ use Tests\TestCase;
 class WalletDataSourceTest extends TestCase{
 
     use RefreshDatabase;
+    private $walletDataSource;
+
+    protected function setUp():void{
+        parent::setUp();
+        Wallet::factory(Wallet::class)->create();
+        $this->walletDataSource = new WalletDataSource();
+    }
 
     /** @test */
     public function getWalletById(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        $wallet = $walletDataSource->getWalletById('1');
+        $wallet = $this->walletDataSource->getWalletById('1');
 
         $this->assertInstanceOf(Wallet::class, $wallet);
     }
 
     /** @test */
     public function noWalletFoundForTheGivenId(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
         try{
-            $walletDataSource->getWalletById('9');
+            $this->walletDataSource->getWalletById('9');
         }catch (Exception $exception) {
             $this->assertEquals('Wallet not found', $exception->getMessage());
         }
@@ -36,104 +37,85 @@ class WalletDataSourceTest extends TestCase{
 
     /** @test */
     public function createNewWalletWithUserId(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        $wallet = $walletDataSource->createNewWalletWithUserId('25');
+        $wallet = $this->walletDataSource->createNewWalletWithUserId('25');
 
         $this->assertEquals('2', $wallet);
     }
 
     /** @test */
     public function walletNotCreatedForNullUser(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
         try{
-            $walletDataSource->createNewWalletWithUserId('');
+            $this->walletDataSource->createNewWalletWithUserId('');
         }catch (Exception $exception) {
-            $this->assertEquals('Wallet not created', $exception->getMessage());
+            $this->assertEquals('User was not found', $exception->getMessage());
         }
     }
 
     /** @test */
     public function updateTransactionBalanceForGivenWalletIdWhenWeBuy(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        $wallet = $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(15, '1');
+        $wallet = $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(15, '1');
 
         $this->assertTrue($wallet);
     }
 
     /** @test */
     public function updateNotDoneForTransactionBalanceForGivenWalletIdWhenWeBuy(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(0, '1');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(0, '1');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Amount_usd have to be positive', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(-1, '1');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(-1, '1');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Amount_usd have to be positive', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Empty Wallet field', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '  ');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenIBuy(25, '  ');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Empty Wallet field', $exception->getMessage());
         }
     }
 
     /** @test */
     public function updateTransactionBalanceForGivenWalletIdWhenWeSell(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
-        $wallet = $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(15, '1');
+        $wallet = $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(15, '1');
 
         $this->assertTrue($wallet);
     }
 
     /** @test */
     public function updateNotDoneForTransactionBalanceForGivenWalletIdWhenWeSell(){
-        Wallet::factory(Wallet::class)->create();
-        $walletDataSource = new WalletDataSource();
-
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(0, '1');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(0, '1');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Amount_usd have to be positive', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(-1, '1');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(-1, '1');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Amount_usd have to be positive', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Empty Wallet field', $exception->getMessage());
         }
 
         try{
-            $walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '  ');
+            $this->walletDataSource->updateTransactionBalanceOfWalletIdWhenISell(25, '  ');
         }catch(Exception $exception){
-            $this->assertEquals('Wallet not updated', $exception->getMessage());
+            $this->assertEquals('Empty Wallet field', $exception->getMessage());
         }
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Services\BuyCoinService;
@@ -43,7 +42,5 @@ class BuyCoinController extends BaseController{
         return response()->json([
             'success' => 'You have bought some coins correctly'
         ], Response::HTTP_OK);
-
     }
 }
-

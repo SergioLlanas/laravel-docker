@@ -28,10 +28,6 @@ class WalletDataSource{
     }
 
     public function updateTransactionBalanceOfWalletIdWhenIBuy(float $amount_usd, String $wallet_id): bool{
-        /*if(trim($wallet_id) === '' || $amount_usd <= 0){
-            throw new Exception('Wallet not updated');
-        }*/
-
         if(trim($wallet_id) === ''){
             throw new Exception('Empty Wallet field');
         }elseif ($amount_usd <=0){
@@ -45,10 +41,6 @@ class WalletDataSource{
     }
 
     public function updateTransactionBalanceOfWalletIdWhenISell(float $amount_usd, String $wallet_id): bool{
-        /*if(trim($wallet_id) === '' || $amount_usd <= 0){
-            throw new Exception('Wallet not updated');
-        }*/
-
         if(trim($wallet_id) === ''){
             throw new Exception('Empty Wallet field');
         }elseif ($amount_usd <=0){

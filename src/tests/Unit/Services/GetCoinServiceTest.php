@@ -18,33 +18,23 @@ class GetCoinServiceTest extends TestCase{
         $prophet = new Prophet();
         $this->coinDataSource = $prophet->prophesize(CoinDataSource::class);
         $this->coinService = new GetCoinService($this->coinDataSource->reveal());
+
+        $coin = new Coin();
+        $coin->fill(['id_transaction' => 1, 'coin_id' => '1', 'nameCoin' => 'Bitcoin',
+            'symbol' => 'BTC', 'wallet_id' => '1', 'amount_coins' => 10]);
     }
 
     /** @test  */
     public function getCoinNameForGivenId(){
-        $coin_id = '1';
-        $coin_name = 'Bitcoin';
-        $coin = new Coin();
-        $coin->fill(['id_transaction' => 1, 'coin_id' => $coin_id, 'nameCoin' => $coin_name,
-            'symbol' => 'BTC', 'wallet_id' => '1', 'amount_coins' => 10]);
+        $this->coinDataSource->getCoinNameById('1')->shouldBeCalledOnce()->willReturn('Bitcoin');
+        $isCoinName = $this->coinService->getCoinName('1');
 
-        $this->coinDataSource->getCoinNameById($coin_id)->shouldBeCalledOnce()->willReturn($coin_name);
-
-        $isCoinName = $this->coinService->getCoinName($coin_id);
-
-        $this->assertEquals($coin_name,$isCoinName );
+        $this->assertEquals('Bitcoin',$isCoinName);
     }
 
     /** @test  */
     public function noneCoinNameFoundForGivenId(){
-        $coin_id = '1';
-        $coin_name = 'Bitcoin';
-        $coin = new Coin();
-        $coin->fill(['id_transaction' => 1, 'coin_id' => $coin_id, 'nameCoin' => $coin_name,
-            'symbol' => 'BTC', 'wallet_id' => '1', 'amount_coins' => 10]);
-
         $this->coinDataSource->getCoinNameById('2')->shouldBeCalledOnce()->willReturn('Coin not found');
-
         $isCoinName = $this->coinService->getCoinName('2');
 
         $this->assertEquals('Coin not found',$isCoinName);

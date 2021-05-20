@@ -33,7 +33,6 @@ class GetWalletServiceTest extends TestCase{
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
         $this->walletDataSource->createNewWalletWithUserId($user_id)->shouldBeCalledOnce()->willReturn($wallet_id);
-
         $isWallet = $this->walletService->open($user_id);
 
         $this->assertInstanceOf(Wallet::class, $isWallet);
@@ -47,7 +46,6 @@ class GetWalletServiceTest extends TestCase{
         $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
-
         $isWallet = $this->walletService->find($wallet_id);
 
         $this->assertInstanceOf(Wallet::class, $isWallet);
@@ -64,7 +62,6 @@ class GetWalletServiceTest extends TestCase{
             'symbol' => 'BTC', 'wallet_id' => $wallet_id, 'amount' => 10, 'value_usd' => 10]);
 
         $this->coinDataSource->getCoinsByWalletId($wallet_id)->shouldBeCalledOnce()->willReturn($coin);
-
         $isCoin = $this->walletService->getWalletCoins($wallet_id);
 
         $this->assertInstanceOf(Coin::class, $isCoin);
@@ -78,7 +75,6 @@ class GetWalletServiceTest extends TestCase{
         $wallet->fill(['wallet_id' => $wallet_id, 'user_id' => $user_id, 'transaction_balance' => 15]);
 
         $this->coinDataSource->getCoinsByWalletId($wallet_id)->shouldBeCalledOnce()->willReturn('Coins not found');
-
         $isCoin = $this->walletService->getWalletCoins($wallet_id);
 
         $this->assertEquals('Coins not found', $isCoin);
@@ -89,7 +85,6 @@ class GetWalletServiceTest extends TestCase{
         $wallet_id = '';
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn(new Wallet());
-
         $isWallet = $this->walletService->find($wallet_id);
 
         $this->assertEquals(new Wallet(), $isWallet);
@@ -103,7 +98,6 @@ class GetWalletServiceTest extends TestCase{
 
         $this->walletDataSource->getWalletById($wallet_id)->shouldBeCalledOnce()->willReturn($wallet);
         $this->walletDataSource->createNewWalletWithUserId($user_id)->shouldBeCalledOnce()->willReturn($wallet_id);
-
         $isWallet = $this->walletService->open($user_id);
 
         $this->assertEquals($wallet, $isWallet);

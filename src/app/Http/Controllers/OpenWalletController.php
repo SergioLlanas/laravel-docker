@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers;
-
 
 use App\DataSource\database\WalletDataSource;
 use App\Services\GetWalletService;
@@ -17,7 +15,6 @@ class OpenWalletController extends BaseController {
      * @var WalletDataSource
      */
     private $getWalletService;
-
 
     /**
      * OpenWalletController constructor.

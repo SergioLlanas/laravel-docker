@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers;
-
 
 use App\DataSource\Database\CoinDataSource;
 use App\DataSource\Database\WalletDataSource;
@@ -19,7 +17,6 @@ class SellCoinController extends BaseController{
      * @var CoinDataSource
      */
     private $sellCoinService;
-
 
     /**
      * BuyCoinController constructor.
@@ -52,7 +49,5 @@ class SellCoinController extends BaseController{
         return response()->json([
             'success' => 'You have sold some coins correctly'
         ], Response::HTTP_OK);
-
     }
-
 }

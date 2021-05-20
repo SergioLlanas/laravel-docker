@@ -39,8 +39,6 @@ class CoinDataSource{
         return $coin->amount;
     }
 
-    //Si antes hemos comprobado que el wallet existe nada, si no lo hemos comprobado devolver tambien
-    //una excepcion por si lo k no existe es el wallet
     public function getCoinsByWalletId(String $wallet_id){
         $coins = Coin::query()->where('wallet_id',$wallet_id)->select('coin_id', 'name', 'symbol', 'amount', 'value_usd');
         if (is_null($coins)){
@@ -49,7 +47,6 @@ class CoinDataSource{
         return $coins;
     }
 
-    //Error por si no se ha insertado bien el coin ($coin is null)
     public function doNewTransaction(String $coin_id, String $wallet_id, float $amount_usd,String $name, String $symbol,float $buy_price):String{
         if(is_null($coin_id) || trim($coin_id) === '' || is_null($wallet_id) || trim($wallet_id) === '' ||is_null($name) || trim($name) === ''
         || is_null($symbol) || trim($symbol) === '' || is_null($buy_price) || $buy_price<= 0 || is_null($amount_usd) || $amount_usd<= 0){
@@ -64,10 +61,6 @@ class CoinDataSource{
    }
 
     public function incrementAmountCoinByIdAndWallet(String $coin_id, float $amount_coin, String $walletId){
-        /*if(trim($coin_id) === '' || trim($walletId) === '' || $amount_coin <= 0){
-            throw new Exception('Amount coin not updated');
-        }*/
-
         if(trim($coin_id === '')){
             throw new Exception('Empty Coin Field');
         }elseif (trim($walletId) === ''){
@@ -87,9 +80,6 @@ class CoinDataSource{
     }
 
     public function decrementAmountCoinByIdAndWallet(String $coin_id,float $amount_coin, String $walletId):bool{
-        /*if(trim($coin_id) === '' ||trim($amount_coin) === '' || trim($walletId) === '' || $amount_coin <= 0){
-            throw new Exception('Amount coin not updated');
-        }*/
         if(trim($coin_id === '')){
             throw new Exception('Empty Coin Field');
         }elseif (trim($walletId) === ''){
@@ -109,15 +99,11 @@ class CoinDataSource{
     }
 
     public function makeBuyTransaction(float $buyPrice, String $name,String $symbol, String $coin_id, String $wallet_id, float $amount_usd){
-        /* Comprobamos si existe la coin en la cartera */
         $coin = Coin::query()->where('coin_id', $coin_id)->where('wallet_id', $wallet_id)->first();
 
-        /* Hacer la transacción */
         if($coin->get()->count() == 0){
-            /* No existe */
             return $this->doNewTransaction($coin_id,$wallet_id,$amount_usd,$name,$symbol,$buyPrice);
         }else{
-            /* Existe */
             return $this->incrementAmountCoinByIdAndWallet($coin_id,$amount_usd/floatval($buyPrice),$wallet_id);
         }
     }

@@ -46,6 +46,7 @@ class BuyCoinControllerTest extends TestCase{
     /** @test */
     public function tryToBuyCoinsWithOutAmount(){
         $response = $this->postJson('/api/coin/buy',['coin_id' => '1', 'wallet_id' => '1', 'amount_usd'=>'']);
+
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson(['error' => 'Coin and wallet not found']);
     }
 
@@ -62,5 +63,4 @@ class BuyCoinControllerTest extends TestCase{
 
         $response->assertStatus(Response::HTTP_NOT_FOUND)->assertExactJson(['error' => 'Coin with specific Id not found']);
     }
-
 }
